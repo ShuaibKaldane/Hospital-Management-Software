@@ -1,0 +1,32 @@
+# Node Modules
+**/node_modules/
+
+# Angular Build
+**/dist/
+
+# Angular Cache
+**/.angular/
+
+# Environment Files
+**/.env
+
+# Logs
+*.log
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Coverage
+**/coverage/
+
+# Build Output
+**/build/
+
+# Temporary Files
+*.tmp
