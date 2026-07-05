@@ -1,0 +1,57 @@
+<mxfile host="app.diagrams.net" modified="2026-07-05T00:00:00.000Z" agent="ChatGPT" version="24.7.17">
+  <diagram id="hospital-er" name="ER Diagram">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="users" value="USERS&#10;PK id&#10;name&#10;email&#10;password&#10;role&#10;status" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="120" width="180" height="150" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="doctor_profiles" value="DOCTOR_PROFILES&#10;PK id&#10;FK user_id&#10;FK category_id&#10;experience&#10;qualification&#10;consultation_fee" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="380" y="40" width="220" height="180" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="patient_profiles" value="PATIENT_PROFILES&#10;PK id&#10;FK user_id&#10;age&#10;gender&#10;blood_group" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="380" y="270" width="220" height="150" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="categories" value="DOCTOR_CATEGORIES&#10;PK id&#10;category_name" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="700" y="40" width="200" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="appointments" value="APPOINTMENTS&#10;PK id&#10;FK doctor_id&#10;FK patient_id&#10;date&#10;time&#10;status" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="700" y="260" width="220" height="170" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="reports" value="PATIENT_REPORTS" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="80" width="180" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="prescriptions" value="PRESCRIPTIONS" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="220" width="180" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="payments" value="PAYMENTS" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="360" width="180" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="salary" value="DOCTOR_SALARY_TRANSACTIONS" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="700" y="500" width="250" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e1" edge="1" source="users" target="doctor_profiles" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" edge="1" source="users" target="patient_profiles" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" edge="1" source="doctor_profiles" target="categories" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" edge="1" source="doctor_profiles" target="appointments" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" edge="1" source="patient_profiles" target="appointments" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" edge="1" source="appointments" target="reports" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e7" edge="1" source="appointments" target="prescriptions" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e8" edge="1" source="appointments" target="payments" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e9" edge="1" source="doctor_profiles" target="salary" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
