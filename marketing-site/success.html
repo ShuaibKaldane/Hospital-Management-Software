@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>You're activated — MediCare+</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Your MediCare+ hospital is activated. Download your super-admin credentials.">
+  <meta name="theme-color" content="#0E7490">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230E7490'/%3E%3Cpath d='M14 8h4v6h6v4h-6v6h-4v-6H8v-4h6V8z' fill='white'/%3E%3C/svg%3E">
+</head>
+<body data-page="success">
+
+  <header class="navbar">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 4h4v6h6v4h-6v6h-4v-6H4v-4h6V4z"/></svg>
+        </span>
+        MediCare<span style="color:#D97706">+</span>
+      </a>
+      <nav class="nav-links">
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="index.html#features" data-nav="features">Features</a>
+        <a href="index.html#roles" data-nav="roles">For everyone</a>
+        <a href="pricing.html" data-nav="pricing">Pricing</a>
+        <a href="checkout.html?plan=professional" class="nav-cta">Buy another</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="section" style="padding-top:60px;">
+    <div class="container" style="max-width:880px;">
+
+      <div class="success-banner">
+        <div class="ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div style="flex:1;">
+          <h3>🎉 Your hospital is live on MediCare+</h3>
+          <p>We've activated your account and generated your super-admin credentials. Save them somewhere safe.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Super-admin credentials</h3>
+        <p class="sub">Use these details to sign in as the administrator of <strong id="hospital-name">your hospital</strong>.</p>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Hospital</label>
+            <input id="f-hospital" readonly>
+          </div>
+          <div class="field">
+            <label>Plan</label>
+            <input id="f-plan" readonly>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Admin email</label>
+            <input id="f-email" readonly>
+            <button type="button" class="btn btn-sm btn-ghost" data-copy="f-email" style="margin-top:6px; padding:6px 10px;">Copy</button>
+          </div>
+          <div class="field">
+            <label>Admin password</label>
+            <input id="f-pass" readonly>
+            <button type="button" class="btn btn-sm btn-ghost" data-copy="f-pass" style="margin-top:6px; padding:6px 10px;">Copy</button>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Transaction ID</label>
+            <input id="f-txn" readonly>
+          </div>
+          <div class="field">
+            <label>Date</label>
+            <input id="f-date" readonly>
+          </div>
+        </div>
+
+        <div class="action-grid">
+          <button id="downloadBtn" class="btn btn-primary btn-lg">
+            ⬇ Download credentials (.txt)
+          </button>
+          <button id="copyAllBtn" class="btn btn-outline btn-lg">
+            📋 Copy all
+          </button>
+          <a id="loginLink" href="#" class="btn btn-accent btn-lg">
+            🔐 Go to admin login
+          </a>
+        </div>
+
+        <div class="note">
+          <strong>Heads up:</strong> Your credentials are <em>only</em> stored in this download.
+          MediCare+ never emails passwords in plain text. If you lose this file, you can request
+          a password reset from the login screen.
+        </div>
+      </div>
+
+      <!-- File preview -->
+      <div class="card mt-20">
+        <h3>Your file preview</h3>
+        <p class="sub">This is the exact content that will be saved as <code id="file-name">credentials.txt</code>.</p>
+        <pre class="cred-box" id="previewBox"></pre>
+      </div>
+
+      <!-- What's next -->
+      <div class="card mt-20">
+        <h3>What's next?</h3>
+        <ol style="padding-left:20px; color:var(--c-ink-700); line-height:1.9;">
+          <li>Open the admin login page and sign in with the email + password above.</li>
+          <li>Go to <strong>Settings → Profile</strong> and change your password.</li>
+          <li>Add your doctors and set their consultation fees.</li>
+          <li>From this moment on, patients across India will see <strong id="next-hospital">your hospital</strong> in the sign-up dropdown.</li>
+        </ol>
+
+        <div class="action-grid mt-20">
+          <a href="index.html" class="btn btn-outline">← Back to home</a>
+          <a href="pricing.html" class="btn btn-ghost">Manage plan</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="legal" style="border-top:none; padding-top:0;">
+        <span>© 2026 MediCare+ · All rights reserved</span>
+        <span>Need help? <a href="mailto:hello@medicare-plus.in" style="color:#fff">hello@medicare-plus.in</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/script.js"></script>
+  <script>
+    (function setupSuccess() {
+      const q = new URLSearchParams(window.location.search);
+      const hospital   = q.get('hospital') || 'Your Hospital';
+      const planId     = q.get('plan')     || 'professional';
+      const email      = q.get('email')    || ('admin@' + MediCare.slugify(hospital) + '.in');
+      const pass       = q.get('pass')     || MediCare.generatePassword(12);
+      const txn        = q.get('txn')      || MediCare.generateTransactionId();
+      const city       = q.get('city')     || '';
+      const price      = parseInt(q.get('price') || '14999', 10);
+
+      const plan = MediCare.PLANS[planId] || MediCare.PLANS.professional;
+
+      // Build a record (for file preview / re-download).
+      const record = {
+        hospitalName:   hospital,
+        planName:       plan.name,
+        planPrice:      price,
+        purchaseDate:   new Date().toISOString(),
+        transactionId:  txn,
+        adminEmail:     email,
+        adminPassword:  pass,
+        loginUrl:       window.location.origin + '/index.html'
+      };
+
+      // Populate DOM
+      document.getElementById('hospital-name').textContent = hospital;
+      document.getElementById('next-hospital').textContent = hospital;
+      document.title = `${hospital} — Activated on MediCare+`;
+      document.getElementById('f-hospital').value = hospital;
+      document.getElementById('f-plan').value     = plan.name + (city ? `  ·  ${city}` : '');
+      document.getElementById('f-email').value    = email;
+      document.getElementById('f-pass').value     = pass;
+      document.getElementById('f-txn').value      = txn;
+      document.getElementById('f-date').value     = new Date().toLocaleString('en-IN', { dateStyle: 'long', timeStyle: 'short' });
+
+      const fileName = `medicare-${MediCare.slugify(hospital)}-credentials.txt`;
+      document.getElementById('file-name').textContent = fileName;
+
+      const text = MediCare.buildCredentialsText(record);
+      const previewBox = document.getElementById('previewBox');
+      previewBox.textContent = text;
+
+      // Auto-download the credentials file once the page loads.
+      // (Slight delay so the user can see the success banner first.)
+      setTimeout(() => MediCare.downloadText(fileName, text), 700);
+
+      // Re-download button
+      document.getElementById('downloadBtn').addEventListener('click', () => {
+        MediCare.downloadText(fileName, text);
+      });
+
+      // Copy-all button
+      document.getElementById('copyAllBtn').addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(text);
+          const btn = document.getElementById('copyAllBtn');
+          const old = btn.textContent;
+          btn.textContent = '✓ Copied!';
+          setTimeout(() => (btn.textContent = old), 1800);
+        } catch (e) {
+          alert('Copy failed — please select the text manually.');
+        }
+      });
+
+      // Per-field copy buttons
+      document.querySelectorAll('[data-copy]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const target = document.getElementById(btn.dataset.copy);
+          try {
+            await navigator.clipboard.writeText(target.value);
+            const old = btn.textContent;
+            btn.textContent = '✓ Copied';
+            setTimeout(() => (btn.textContent = old), 1500);
+          } catch (e) { /* ignore */ }
+        });
+      });
+
+      // Login link → points to the Angular app (separate origin / port)
+      // Adjust if your Angular dev URL is different.
+      document.getElementById('loginLink').href = 'http://localhost:4200/login';
+    })();
+  </script>
+</body>
+</html>

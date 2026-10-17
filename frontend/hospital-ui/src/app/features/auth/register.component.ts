@@ -4,8 +4,9 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { DoctorService } from '../../core/services/doctor.service';
+import { HospitalService } from '../../core/services/hospital.service';
 import { DoctorCategory } from '../../core/models/doctor.model';
-
+import { HospitalOption } from '../../core/models/hospital.model';
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -21,7 +22,7 @@ import { DoctorCategory } from '../../core/models/doctor.model';
         <p>Create your account in seconds. Book appointments with verified specialists and access your medical history anywhere.</p>
         <ul>
           <li>Free to create · No credit card</li>
-          <li>Verified doctors only</li>
+          <li>Pick the hospital you want to register with</li>
           <li>Secure data · GDPR-aware</li>
         </ul>
       </div>
@@ -34,6 +35,38 @@ import { DoctorCategory } from '../../core/models/doctor.model';
       <form class="auth-form" [formGroup]="form" (ngSubmit)="submit()">
         <h2>Create patient account</h2>
         <p class="subtitle">Tell us a bit about yourself.</p>
+
+        <!-- Hospital selection -->
+        <div class="form-group">
+          <label class="form-label">
+            Register with hospital
+            <span *ngIf="hospitals().length === 0" class="text-muted" style="font-weight:400"> — none yet</span>
+          </label>
+
+          <select class="form-control" formControlName="hospital_id">
+            <option [ngValue]="''" disabled>
+              {{ hospitals().length === 0
+                  ? 'No hospitals available — buy a plan first'
+                  : 'Select a hospital' }}
+            </option>
+            <option *ngFor="let h of hospitals()" [ngValue]="h.id">
+              {{ h.hospitalName }}<ng-container *ngIf="h.city">  —  {{ h.city }}</ng-container>
+              <ng-container *ngIf="h.planName">  ·  {{ h.planName }}</ng-container>
+            </option>
+          </select>
+
+          <div *ngIf="hospitals().length === 0" class="text-muted" style="font-size:12px; margin-top:6px;">
+            Hospitals appear here once they purchase a plan from
+            <a href="../marketing-site/" target="_blank" rel="noopener">our pricing page</a>.
+            Or click below to seed a few demo hospitals.
+          </div>
+
+          <button type="button" *ngIf="hospitals().length === 0"
+                  class="btn btn-ghost btn-sm" style="margin-top:8px;"
+                  (click)="seedDemoHospitals()">
+            + Seed demo hospitals
+          </button>
+        </div>
 
         <div class="form-row">
           <div class="form-group">
@@ -88,7 +121,8 @@ import { DoctorCategory } from '../../core/models/doctor.model';
 
         <div class="alert alert-error" *ngIf="error()">{{ error() }}</div>
 
-        <button type="submit" class="btn btn-primary btn-block btn-lg" [disabled]="loading() || form.invalid">
+        <button type="submit" class="btn btn-primary btn-block btn-lg"
+                [disabled]="loading() || form.invalid">
           <span *ngIf="!loading()">Create account</span>
           <span *ngIf="loading()">Creating…</span>
         </button>
@@ -105,13 +139,17 @@ export class RegisterComponent implements OnInit {
   private readonly fb    = inject(FormBuilder).nonNullable;
   private readonly auth  = inject(AuthService);
   private readonly docs  = inject(DoctorService);
+  private readonly hospitalsSvc = inject(HospitalService);
   private readonly router = inject(Router);
 
-  readonly loading = signal(false);
-  readonly error   = signal<string | null>(null);
+  readonly loading    = signal(false);
+  readonly error      = signal<string | null>(null);
+  readonly hospitals  = this.hospitalsSvc.hospitals;
+
   categories: DoctorCategory[] = [];
 
   form: FormGroup = this.fb.group({
+    hospital_id: ['', Validators.required],
     name:        ['', Validators.required],
     email:       ['', [Validators.required, Validators.email]],
     password:    ['', [Validators.required, Validators.minLength(6)]],
@@ -128,6 +166,34 @@ export class RegisterComponent implements OnInit {
     });
   }
 
+  /** Insert a few sample hospitals so the dropdown has content for the demo. */
+  seedDemoHospitals(): void {
+    const existing = JSON.parse(localStorage.getItem('medicare_hospitals') ?? '[]');
+    const samples: HospitalOption[] = [
+      {
+        id: 'HSP-DEMO-001',
+        hospitalName: 'Sunshine Multispeciality Hospital',
+        city: 'Bengaluru',
+        planName: 'Professional'
+      },
+      {
+        id: 'HSP-DEMO-002',
+        hospitalName: 'Apollo City Clinic',
+        city: 'Mumbai',
+        planName: 'Basic'
+      },
+      {
+        id: 'HSP-DEMO-003',
+        hospitalName: 'Care & Cure Hospital',
+        city: 'Delhi',
+        planName: 'Enterprise'
+      }
+    ];
+    const merged = [...existing, ...samples];
+    localStorage.setItem('medicare_hospitals', JSON.stringify(merged));
+    this.hospitalsSvc.refresh();
+  }
+
   submit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -136,7 +202,34 @@ export class RegisterComponent implements OnInit {
     this.loading.set(true);
     this.error.set(null);
 
-    this.auth.patientSignup(this.form.value).subscribe({
+    const v = this.form.value as {
+      hospital_id: string;
+      name: string; email: string; password: string;
+      phone?: string; age?: number | null; gender?: string;
+      blood_group?: string; address?: string;
+    };
+
+    // Attach the chosen hospital's name so the backend (and any
+    // downstream screens) know which hospital the patient belongs to.
+    const hospital = this.hospitalsSvc.getById(v.hospital_id);
+
+    // Normalize null → undefined and add hospital context.
+    // The extra `hospital_id` / `hospital_name` fields travel along
+    // harmlessly even when the backend ignores them.
+    const payload = {
+      name:          v.name,
+      email:         v.email,
+      password:      v.password,
+      phone:         v.phone || undefined,
+      age:           v.age ?? undefined,
+      gender:        v.gender || undefined,
+      blood_group:   v.blood_group || undefined,
+      address:       v.address || undefined,
+      hospital_id:   v.hospital_id,
+      hospital_name: hospital?.hospitalName ?? null
+    } as Parameters<AuthService['patientSignup']>[0];
+
+    this.auth.patientSignup(payload).subscribe({
       next: (res) => {
         this.loading.set(false);
         const user = (res as any).user ?? (res as any).data?.user;

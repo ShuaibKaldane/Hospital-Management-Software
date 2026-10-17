@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Checkout — MediCare+</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Activate MediCare+ for your hospital. Pay in Indian Rupees and download your admin credentials.">
+  <meta name="theme-color" content="#0E7490">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230E7490'/%3E%3Cpath d='M14 8h4v6h6v4h-6v6h-4v-6H8v-4h6V8z' fill='white'/%3E%3C/svg%3E">
+</head>
+<body data-page="checkout">
+
+  <header class="navbar">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 4h4v6h6v4h-6v6h-4v-6H4v-4h6V4z"/></svg>
+        </span>
+        MediCare<span style="color:#D97706">+</span>
+      </a>
+      <nav class="nav-links">
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="index.html#features" data-nav="features">Features</a>
+        <a href="index.html#roles" data-nav="roles">For everyone</a>
+        <a href="pricing.html" data-nav="pricing">Pricing</a>
+        <a href="checkout.html?plan=professional" class="nav-cta">Get started</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="section" style="padding-top:60px;">
+    <div class="container">
+
+      <div class="section-head" style="text-align:left; margin-bottom:30px;">
+        <span class="eyebrow">Activate your hospital</span>
+        <h2>Complete your purchase</h2>
+        <p>Fill in your hospital details and complete the (mock) payment to receive your admin credentials instantly.</p>
+      </div>
+
+      <form id="checkout-form" class="checkout-grid" novalidate>
+
+        <!-- LEFT: forms -->
+        <div>
+          <!-- Hospital info -->
+          <div class="card">
+            <h3>1. Hospital details</h3>
+            <p class="sub">These details will appear to patients when they pick your hospital during sign-up.</p>
+
+            <div class="field">
+              <label>Hospital name <span class="req">*</span></label>
+              <input name="hospitalName" required placeholder="e.g. Sunshine Multispeciality Hospital">
+              <div class="err" data-err="hospitalName"></div>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label>Admin full name <span class="req">*</span></label>
+                <input name="adminName" required placeholder="Your full name">
+                <div class="err" data-err="adminName"></div>
+              </div>
+              <div class="field">
+                <label>Admin email <span class="req">*</span></label>
+                <input name="adminEmail" type="email" required placeholder="admin@yourhospital.com">
+                <div class="hint">This becomes your super-admin login.</div>
+                <div class="err" data-err="adminEmail"></div>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label>Phone <span class="req">*</span></label>
+                <input name="phone" required placeholder="+91 98765 43210">
+                <div class="err" data-err="phone"></div>
+              </div>
+              <div class="field">
+                <label>City <span class="req">*</span></label>
+                <input name="city" required placeholder="e.g. Bengaluru">
+                <div class="err" data-err="city"></div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Full address</label>
+              <textarea name="address" rows="2" placeholder="Street, area, state, PIN code"></textarea>
+            </div>
+          </div>
+
+          <!-- Billing -->
+          <div class="card mt-20">
+            <h3>2. Payment</h3>
+            <p class="sub">This is a demo checkout — no real card is charged. Payment integration with Razorpay / Stripe can be wired in later.</p>
+
+            <div class="field-row">
+              <div class="field">
+                <label>Card number</label>
+                <input name="cardNumber" placeholder="4242 4242 4242 4242" inputmode="numeric" maxlength="19">
+              </div>
+              <div class="field">
+                <label>Name on card</label>
+                <input name="cardName" placeholder="As shown on card">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label>Expiry (MM/YY)</label>
+                <input name="cardExpiry" placeholder="12/28" maxlength="5">
+              </div>
+              <div class="field">
+                <label>CVV</label>
+                <input name="cardCvv" placeholder="123" inputmode="numeric" maxlength="4">
+              </div>
+            </div>
+
+            <div class="note">
+              <strong>Demo note:</strong> Your card is not validated and not stored. To complete a test purchase,
+              click <em>Complete purchase</em> — your admin credentials will be generated instantly.
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: summary -->
+        <div>
+          <div class="card" style="position:sticky; top:90px">
+            <h3>Order summary</h3>
+            <p class="sub">You're activating the <span id="summary-plan-name" style="font-weight:700; color:var(--c-ink-900)">—</span> plan.</p>
+
+            <div class="summary-row">
+              <span>Plan</span>
+              <span id="summary-plan">—</span>
+            </div>
+            <div class="summary-row">
+              <span>Monthly</span>
+              <span id="summary-monthly">—</span>
+            </div>
+            <div class="summary-row">
+              <span>GST (18%)</span>
+              <span id="summary-gst">—</span>
+            </div>
+            <div class="summary-row total">
+              <span>Total today</span>
+              <span id="summary-total">—</span>
+            </div>
+
+            <div style="margin-top:18px;">
+              <label style="font-size:0.86rem; font-weight:600; color:var(--c-ink-700); margin-bottom:6px; display:block;">Billing cycle</label>
+              <select name="cycle" class="form-control" style="width:100%;padding:11px 14px;border:1px solid var(--c-ink-300);border-radius:10px;font-family:inherit;font-size:.95rem;">
+                <option value="monthly">Monthly · best for trying out</option>
+                <option value="annual">Annual · save up to 20%</option>
+              </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block btn-lg mt-20" id="payBtn">
+              <span>Complete purchase</span>
+            </button>
+
+            <p class="text-center" style="font-size:12px; color:var(--c-ink-500); margin:14px 0 0;">
+              By continuing you agree to our terms. Cancel anytime — first 7 days free.
+            </p>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="legal" style="border-top:none; padding-top:0;">
+        <span>© 2026 MediCare+ · All rights reserved</span>
+        <span>Made with care for Indian healthcare</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/script.js"></script>
+  <script>
+    /* ---- Render order summary from ?plan=id ---- */
+    (function setupCheckout() {
+      const planId = MediCare.getQueryParam('plan') || 'professional';
+      const valid = MediCare.PLAN_ORDER.includes(planId);
+      const plan  = valid ? MediCare.PLANS[planId] : MediCare.PLANS.professional;
+
+      document.getElementById('summary-plan-name').textContent = plan.name;
+      document.getElementById('summary-plan').textContent     = plan.name;
+      document.getElementById('summary-monthly').textContent  = MediCare.formatINR(plan.monthly);
+
+      const monthly   = plan.monthly;
+      const gst       = monthly * 0.18;
+      const total     = monthly + gst;
+      document.getElementById('summary-gst').textContent   = MediCare.formatINR(gst);
+      document.getElementById('summary-total').textContent = MediCare.formatINR(total);
+
+      // Annual recalc
+      const cycleEl = document.querySelector('select[name="cycle"]');
+      function recompute() {
+        const isAnnual = cycleEl.value === 'annual';
+        const monthlyAmt = isAnnual ? plan.annual / 12 : plan.monthly;
+        const gstAmt     = monthlyAmt * 0.18;
+        document.getElementById('summary-monthly').textContent = MediCare.formatINR(monthlyAmt);
+        document.getElementById('summary-gst').textContent     = MediCare.formatINR(gstAmt);
+        document.getElementById('summary-total').textContent   = MediCare.formatINR(monthlyAmt + gstAmt);
+      }
+      cycleEl.addEventListener('change', recompute);
+
+      // Form submit
+      const form = document.getElementById('checkout-form');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        // Validate required fields
+        const required = ['hospitalName','adminName','adminEmail','phone','city'];
+        let validForm = true;
+        required.forEach(name => {
+          const el  = form.elements[name];
+          const err = form.querySelector(`[data-err="${name}"]`);
+          if (!el.value.trim()) {
+            err.textContent = 'This field is required.';
+            validForm = false;
+          } else if (name === 'adminEmail' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value)) {
+            err.textContent = 'Please enter a valid email.';
+            validForm = false;
+          } else {
+            err.textContent = '';
+          }
+        });
+        if (!validForm) return;
+
+        // Generate credentials and record
+        const adminPassword  = MediCare.generatePassword(12);
+        const transactionId  = MediCare.generateTransactionId();
+        const hospitalSlug   = MediCare.slugify(form.elements['hospitalName'].value);
+
+        const cycle   = cycleEl.value;
+        const monthly = cycle === 'annual' ? plan.annual / 12 : plan.monthly;
+
+        const record = {
+          id:             'HSP-' + Date.now().toString(36).toUpperCase(),
+          hospitalName:   form.elements['hospitalName'].value.trim(),
+          hospitalSlug:   hospitalSlug,
+          city:           form.elements['city'].value.trim(),
+          address:        form.elements['address'].value.trim(),
+          phone:          form.elements['phone'].value.trim(),
+          adminName:      form.elements['adminName'].value.trim(),
+          adminEmail:     form.elements['adminEmail'].value.trim(),
+          adminPassword:  adminPassword,
+          planId:         plan.id,
+          planName:       plan.name,
+          planPrice:      monthly,
+          billingCycle:   cycle,
+          transactionId:  transactionId,
+          purchaseDate:   new Date().toISOString(),
+          loginUrl:       window.location.origin + '/index.html'
+        };
+
+        MediCare.saveHospital(record);
+
+        // Pass via query string to success page
+        const q = new URLSearchParams({
+          hospital:    record.hospitalName,
+          plan:        plan.id,
+          email:       record.adminEmail,
+          pass:        record.adminPassword,
+          txn:         transactionId,
+          city:        record.city,
+          price:       Math.round(record.planPrice).toString()
+        });
+        window.location.href = 'success.html?' + q.toString();
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -24,7 +24,8 @@ import { RouterModule } from '@angular/router';
       </a>
       <div class="nav-actions">
         <a routerLink="/login"  class="btn btn-ghost">Sign in</a>
-        <a routerLink="/register" class="btn btn-primary">Get started</a>
+        <a routerLink="/register" class="btn btn-outline">Patient sign-up</a>
+        <a href="../../marketing-site/pricing.html" class="btn btn-primary">Buy plan for hospital</a>
       </div>
     </nav>
 
