@@ -1,59 +1,49 @@
-import { Injectable, signal } from '@angular/core';
-import { HospitalOption } from '../models/hospital.model';
-
-const STORAGE_KEY = 'medicare_hospitals';
+import { Injectable, inject, signal } from '@angular/core';
+import { MarketingStoreService, HospitalRecord } from './marketing-store.service';
 
 /**
- * Reads the list of activated hospitals that the marketing site
- * stored in localStorage after a successful plan purchase.
- *
- * Because this is a static-site purchase flow, the source of
- * truth for "which hospitals exist" is the buyer's browser.
- * When real backend APIs are wired in, swap the read source
- * for an `HttpClient.get<HospitalOption[]>('/hospitals')` call.
+ * Lightweight facade over `MarketingStoreService` tuned for the patient
+ * sign-up form: it exposes only the fields a patient needs to pick a
+ * hospital, and stays in sync as marketing writes new hospitals.
  */
+export interface HospitalOption {
+  id:           string;
+  hospitalName: string;
+  city?:        string;
+  planName?:    string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class HospitalService {
-  /** Reactive list so any component can render a dropdown. */
-  readonly hospitals = signal<HospitalOption[]>(this.read());
+  private readonly store = inject(MarketingStoreService);
+
+  /** Map a stored hospital record → slim option for the sign-up form. */
+  private readonly toOption = (h: HospitalRecord): HospitalOption => ({
+    id:           h.id,
+    hospitalName: h.hospitalName,
+    city:         h.city,
+    planName:     h.planName
+  });
+
+  /** Reactive list of hospitals the patient can register with. */
+  readonly hospitals = signal<HospitalOption[]>(
+    this.store.hospitals().map(this.toOption)
+  );
 
   constructor() {
-    // Cross-tab update: if the user buys a plan in another tab, refresh here.
+    // Cross-tab: marketing site purchase in another tab → refresh.
     window.addEventListener('storage', (e) => {
-      if (e.key === STORAGE_KEY) this.refresh();
+      if (e.key === 'medicare_hospitals') this.refresh();
     });
-
-    // Same-tab update from the marketing site checkout.
+    // Same-tab: marketing checkout fired the custom event we listen for.
     window.addEventListener('medicare:hospitals-updated', () => this.refresh());
   }
 
-  /** Force re-read from localStorage and update the signal. */
   refresh(): void {
-    this.hospitals.set(this.read());
+    this.hospitals.set(this.store.hospitals().map(this.toOption));
   }
 
-  /** Look up a single hospital by id. */
   getById(id: string): HospitalOption | undefined {
     return this.hospitals().find(h => h.id === id);
-  }
-
-  private read(): HospitalOption[] {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return [];
-      const parsed = JSON.parse(raw);
-      if (!Array.isArray(parsed)) return [];
-      return parsed.map((h: any) => ({
-        id:            h.id            ?? '',
-        hospitalName:  h.hospitalName  ?? h.name ?? '',
-        hospitalSlug:  h.hospitalSlug  ?? '',
-        city:          h.city          ?? '',
-        state:         h.state         ?? '',
-        planName:      h.planName      ?? '',
-        transactionId: h.transactionId ?? ''
-      }));
-    } catch {
-      return [];
-    }
   }
 }

@@ -5,7 +5,14 @@ import { roleGuard } from './core/guards/role.guard';
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('./features/home/home.component').then(m => m.HomeComponent)
+    pathMatch: 'full',
+    redirectTo: 'marketing'
+  },
+
+  // ---------- Marketing & subscription ----------
+  {
+    path: 'marketing',
+    loadChildren: () => import('./features/marketing/marketing.routes').then(m => m.MARKETING_ROUTES)
   },
 
   // ---------- Auth ----------
