@@ -8,12 +8,12 @@ import { GST_RATE, PLAN_ORDER, PLANS } from '../../../core/services/marketing-st
   standalone: true,
   imports: [CommonModule, RouterLink],
   template: `
-  <section class="mkt-section" style="padding-top:64px;">
+  <section class="mkt-section" style="padding-top:80px;">
     <div class="mkt-container">
-      <div class="mkt-section__head">
+      <div class="mkt-section__head" style="margin-bottom: 72px;">
         <span class="mkt-section__eyebrow">Pricing</span>
         <h2>Plans in Indian Rupees.<br/>No surprises.</h2>
-        <p>All plans include core hospital management features. Upgrade when you outgrow your current plan — downgrades are free, anytime.</p>
+        <p>All plans include core features. Upgrade, downgrade or cancel anytime.</p>
       </div>
 
       <div class="mkt-pricing">
@@ -87,47 +87,116 @@ import { GST_RATE, PLAN_ORDER, PLANS } from '../../../core/services/marketing-st
       </div>
 
       <div class="mkt-faq">
-        <details open>
-          <summary>What happens after I pay?</summary>
+        <details>
+          <summary>
+            <span class="mkt-faq__icon mkt-faq__icon--blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </span>
+            <span class="mkt-faq__q">What happens after I pay?</span>
+            <span class="mkt-faq__tag">Activation</span>
+          </summary>
           <div class="mkt-faq__body">
             You'll instantly receive a downloadable text file containing your hospital's super-admin email
-            and password. Sign in with those credentials at the login page and you're ready to go.
+            and password. Sign in with those credentials at the login page and you're ready to go. No
+            paperwork, no wait time — most teams are onboarding patients within an hour.
           </div>
         </details>
+
         <details>
-          <summary>Can patients see my hospital right away?</summary>
+          <summary>
+            <span class="mkt-faq__icon mkt-faq__icon--sky">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12 a4 4 0 0 1 8 0"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><path d="M9 9 l1 -2 M15 9 l-1 -2"/></svg>
+            </span>
+            <span class="mkt-faq__q">Can patients see my hospital right away?</span>
+            <span class="mkt-faq__tag">Discovery</span>
+          </summary>
           <div class="mkt-faq__body">
             Yes. The moment your hospital is activated, it appears in the patient registration screen for
-            everyone using MediCare+ to sign up as a patient.
+            everyone using MediCare+ to sign up as a patient. They can pick your hospital and start
+            booking appointments the same day.
           </div>
         </details>
+
         <details>
-          <summary>How does billing work in INR?</summary>
+          <summary>
+            <span class="mkt-faq__icon mkt-faq__icon--cyan">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            </span>
+            <span class="mkt-faq__q">How does billing work in INR?</span>
+            <span class="mkt-faq__tag">Billing</span>
+          </summary>
           <div class="mkt-faq__body">
             We bill monthly in Indian rupees. We accept UPI, net-banking, debit/credit cards and bank
-            transfer. GST invoices are auto-generated every month.
+            transfer. GST invoices are auto-generated every month and emailed to your registered address.
           </div>
         </details>
+
         <details>
-          <summary>Can I upgrade or downgrade later?</summary>
+          <summary>
+            <span class="mkt-faq__icon mkt-faq__icon--violet">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11 V9 a4 4 0 0 1 4 -4 h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13 v2 a4 4 0 0 1 -4 4 h-14"/></svg>
+            </span>
+            <span class="mkt-faq__q">Can I upgrade or downgrade later?</span>
+            <span class="mkt-faq__tag">Flexibility</span>
+          </summary>
           <div class="mkt-faq__body">
-            Yes — upgrade or downgrade from any plan at any time. We'll prorate the difference when you
-            change plans.
+            Yes — upgrade or downgrade from any plan at any time. We prorate the difference when you
+            change plans, so you only pay for what you've used. No lock-in contracts, no penalties.
           </div>
         </details>
+
         <details>
-          <summary>Is my hospital's patient data safe?</summary>
+          <summary>
+            <span class="mkt-faq__icon mkt-faq__icon--success">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </span>
+            <span class="mkt-faq__q">Is my hospital's patient data safe?</span>
+            <span class="mkt-faq__tag">Security</span>
+          </summary>
           <div class="mkt-faq__body">
-            All data is encrypted in transit (TLS 1.3) and at rest. Backups run every night. We never
-            share patient data with third parties.
+            All data is encrypted in transit (TLS 1.3) and at rest (AES-256). Backups run every night
+            with point-in-time recovery. We are DPDP-Act compliant and never share patient data with
+            third parties — your data is yours, full stop.
           </div>
         </details>
+
         <details>
-          <summary>Do you offer a free trial?</summary>
+          <summary>
+            <span class="mkt-faq__icon mkt-faq__icon--indigo">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/><polyline points="22 14 18 14 15 12 15 16"/></svg>
+            </span>
+            <span class="mkt-faq__q">Do you offer a free trial?</span>
+            <span class="mkt-faq__tag">Trial</span>
+          </summary>
           <div class="mkt-faq__body">
-            Yes — first 7 days are free on every plan. No credit card required to explore the demo.
+            Yes — the first 7 days are completely free on every plan. No credit card required to
+            explore the demo. If you decide to continue, your subscription starts automatically.
           </div>
         </details>
+      </div>
+
+      <!-- Still have questions? CTA -->
+      <div class="mkt-faq__more">
+        <div class="mkt-faq__more-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15 a2 2 0 0 1 -2 2 H7 l-4 4 V5 a2 2 0 0 1 2 -2 h14 a2 2 0 0 1 2 2 z"/>
+          </svg>
+        </div>
+        <div class="mkt-faq__more-body">
+          <h3>Still have questions?</h3>
+          <p>Our team responds within 1 hour during business hours. Reach out any way you like.</p>
+          <div class="mkt-faq__more-actions">
+            <a href="mailto:hello@medicare-plus.in" class="mkt-btn mkt-btn--primary mkt-btn--sm">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+              </svg>
+              Email us
+            </a>
+            <a routerLink="/marketing/checkout" [queryParams]="{plan: 'professional'}" class="mkt-btn mkt-btn--outline mkt-btn--sm">
+              Start free trial
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
