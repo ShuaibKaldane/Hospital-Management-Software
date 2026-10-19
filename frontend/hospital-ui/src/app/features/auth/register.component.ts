@@ -225,9 +225,9 @@ export class RegisterComponent implements OnInit {
       gender:        v.gender || undefined,
       blood_group:   v.blood_group || undefined,
       address:       v.address || undefined,
-      hospital_id:   v.hospital_id,
+      hospital_id:   Number(v.hospital_id),
       hospital_name: hospital?.hospitalName ?? null
-    } as Parameters<AuthService['patientSignup']>[0];
+    } as unknown as Parameters<AuthService['patientSignup']>[0];
 
     this.auth.patientSignup(payload).subscribe({
       next: (res) => {

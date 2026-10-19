@@ -1,19 +1,29 @@
 const pool = require("../config/database");
 
-const create = async ({ doctor_id, patient_id, appointment_date, appointment_time }) => {
+/**
+ * Create appointment. `hospital_id` is taken from the doctor's user
+ * record so the appointment is auto-scoped to the correct tenant.
+ */
+const create = async ({ doctor_id, patient_id, hospital_id = null, appointment_date, appointment_time }) => {
+    let resolvedHospitalId = hospital_id;
+    if (!resolvedHospitalId) {
+        const [rows] = await pool.execute(
+            `SELECT hospital_id FROM users WHERE id = ? LIMIT 1`,
+            [doctor_id]
+        );
+        resolvedHospitalId = rows[0]?.hospital_id || null;
+    }
+
     const [result] = await pool.execute(
         `INSERT INTO appointments
-            (doctor_id, patient_id, appointment_date, appointment_time, status)
-         VALUES (?, ?, ?, ?, 'Pending')`,
-        [doctor_id, patient_id, appointment_date, appointment_time]
+            (doctor_id, patient_id, hospital_id, appointment_date, appointment_time, status)
+         VALUES (?, ?, ?, ?, ?, 'Pending')`,
+        [doctor_id, patient_id, resolvedHospitalId, appointment_date, appointment_time]
     );
 
     return result.insertId;
 };
 
-/**
- * Check if a slot is already booked for the given doctor.
- */
 const isSlotTaken = async (doctorId, date, time) => {
     const [rows] = await pool.execute(
         `SELECT id FROM appointments
@@ -32,6 +42,7 @@ const findById = async (id) => {
     const [rows] = await pool.execute(
         `SELECT
             a.id,
+            a.hospital_id,
             a.appointment_date,
             a.appointment_time,
             a.status,
@@ -111,7 +122,7 @@ const findByPatient = async (patientId, { status } = {}) => {
     return rows;
 };
 
-const findAll = async ({ status, date } = {}) => {
+const findAll = async ({ status, date, hospital_id } = {}) => {
     const where = [];
     const params = [];
 
@@ -123,10 +134,16 @@ const findAll = async ({ status, date } = {}) => {
         where.push("a.appointment_date = ?");
         params.push(date);
     }
+    if (hospital_id) {
+        where.push("a.hospital_id = ?");
+        params.push(hospital_id);
+    }
 
     const sql = `
         SELECT
             a.id,
+            a.hospital_id,
+            h.name AS hospital_name,
             a.appointment_date,
             a.appointment_time,
             a.status,
@@ -138,6 +155,7 @@ const findAll = async ({ status, date } = {}) => {
         FROM appointments a
         JOIN users d ON d.id = a.doctor_id
         JOIN users p ON p.id = a.patient_id
+        LEFT JOIN hospitals h ON h.id = a.hospital_id
         ${where.length ? "WHERE " + where.join(" AND ") : ""}
         ORDER BY a.appointment_date DESC, a.appointment_time DESC`;
 

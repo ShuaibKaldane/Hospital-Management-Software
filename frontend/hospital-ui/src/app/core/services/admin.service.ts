@@ -29,6 +29,19 @@ export class AdminService {
     return this.api.put<{ id: number; status: string }>(`/admin/doctors/${id}/block`, {});
   }
 
+  addDoctor(payload: any): Observable<any> {
+    return this.api.post<any>('/admin/doctors', payload);
+  }
+
+  // Patients
+  listPatients(filters?: { search?: string; status?: string; limit?: number; offset?: number }): Observable<any[]> {
+    return this.api.get<any[]>('/admin/patients', filters);
+  }
+
+  addPatient(payload: any): Observable<any> {
+    return this.api.post<any>('/admin/patients', payload);
+  }
+
   // Categories
   listCategories(): Observable<DoctorCategory[]> {
     return this.api.get<DoctorCategory[]>('/doctor-categories');

@@ -3,7 +3,8 @@ const authService = require("../services/auth.service");
 const run = (handler) => async (req, res) => {
     try {
         const result = await handler(req);
-        return res.status(result.status).json(result);
+        const status = result.status || 200;
+        return res.status(status).json(result);
     } catch (error) {
         const status = error.status || 500;
         return res.status(status).json({
@@ -13,19 +14,24 @@ const run = (handler) => async (req, res) => {
     }
 };
 
+const superAdminLogin = run(async (req) => {
+    const result = await authService.superAdminLogin(req.body);
+    return { ...result, status: 200 };
+});
+
 const adminLogin = run(async (req) => {
     const result = await authService.adminLogin(req.body);
-    return { ...result, status: result.status };
+    return { ...result, status: 200 };
 });
 
 const doctorLogin = run(async (req) => {
     const result = await authService.doctorLogin(req.body);
-    return { ...result, status: result.status };
+    return { ...result, status: 200 };
 });
 
 const patientLogin = run(async (req) => {
     const result = await authService.patientLogin(req.body);
-    return { ...result, status: result.status };
+    return { ...result, status: 200 };
 });
 
 const doctorSignup = run(async (req) => {
@@ -44,6 +50,7 @@ const patientSignup = run(async (req) => {
 });
 
 module.exports = {
+    superAdminLogin,
     adminLogin,
     doctorLogin,
     patientLogin,

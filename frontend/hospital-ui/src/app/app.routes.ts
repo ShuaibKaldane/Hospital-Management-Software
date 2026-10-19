@@ -29,7 +29,21 @@ export const routes: Routes = [
     loadComponent: () => import('./features/auth/doctor-signup.component').then(m => m.DoctorSignupComponent)
   },
 
-  // ---------- Admin ----------
+  // ---------- Super Admin ----------
+  {
+    path: 'super-admin',
+    canActivate: [authGuard, roleGuard('SUPER_ADMIN')],
+    loadComponent: () => import('./shared/shell/shell.component').then(m => m.ShellComponent),
+    children: [
+      { path: '',         loadComponent: () => import('./features/super-admin/dashboard.component').then(m => m.SuperAdminDashboardComponent) },
+      { path: 'hospitals',loadComponent: () => import('./features/super-admin/hospitals.component').then(m => m.SuperAdminHospitalsComponent) },
+      { path: 'doctors',  loadComponent: () => import('./features/super-admin/doctors.component').then(m => m.SuperAdminDoctorsComponent) },
+      { path: 'patients', loadComponent: () => import('./features/super-admin/patients.component').then(m => m.SuperAdminPatientsComponent) },
+      { path: 'payments', loadComponent: () => import('./features/super-admin/payments.component').then(m => m.SuperAdminPaymentsComponent) }
+    ]
+  },
+
+  // ---------- Hospital Admin ----------
   {
     path: 'admin',
     canActivate: [authGuard, roleGuard('ADMIN')],
@@ -37,6 +51,7 @@ export const routes: Routes = [
     children: [
       { path: '',           loadComponent: () => import('./features/admin/dashboard.component').then(m => m.AdminDashboardComponent) },
       { path: 'doctors',    loadComponent: () => import('./features/admin/doctors.component').then(m => m.ManageDoctorsComponent) },
+      { path: 'patients',   loadComponent: () => import('./features/admin/patients.component').then(m => m.ManagePatientsComponent) },
       { path: 'categories', loadComponent: () => import('./features/admin/categories.component').then(m => m.ManageCategoriesComponent) },
       { path: 'appointments', loadComponent: () => import('./features/admin/appointments.component').then(m => m.AllAppointmentsComponent) },
       { path: 'payments',   loadComponent: () => import('./features/admin/payments.component').then(m => m.AllPaymentsComponent) },

@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { TokenService } from '../../core/services/token.service';
 
-type Role = 'ADMIN' | 'DOCTOR' | 'PATIENT';
+type Role = 'SUPER_ADMIN' | 'ADMIN' | 'DOCTOR' | 'PATIENT';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +21,8 @@ type Role = 'ADMIN' | 'DOCTOR' | 'PATIENT';
         <h1>Welcome back.<br/>Let's get you signed in.</h1>
         <p>Choose your role and enter your credentials. Your data is encrypted and protected with JWT authentication.</p>
         <ul>
-          <li>Admin · manage the entire hospital</li>
+          <li>Super Admin · manage every hospital on the platform</li>
+          <li>Admin · manage your hospital, doctors &amp; patients</li>
           <li>Doctor · patients, prescriptions &amp; earnings</li>
           <li>Patient · appointments, reports &amp; prescriptions</li>
         </ul>
@@ -35,16 +37,16 @@ type Role = 'ADMIN' | 'DOCTOR' | 'PATIENT';
         <h2>Sign in</h2>
         <p class="subtitle">Choose your role and continue.</p>
 
-        <div class="role-switch">
+        <div class="role-switch role-switch-4">
           <button type="button" *ngFor="let r of roles" (click)="setRole(r)"
                   [class.active]="role() === r">
-            {{ r === 'ADMIN' ? 'Admin' : r === 'DOCTOR' ? 'Doctor' : 'Patient' }}
+            {{ labelFor(r) }}
           </button>
         </div>
 
         <div class="form-group">
           <label class="form-label">Email</label>
-          <input class="form-control" type="email" formControlName="email" placeholder="you@hospital.com" autocomplete="email">
+          <input class="form-control" type="email" formControlName="email" [placeholder]="emailPlaceholder()" autocomplete="email">
           <div class="form-error" *ngIf="form.controls['email'].touched && form.controls['email'].invalid">
             Valid email is required.
           </div>
@@ -61,7 +63,7 @@ type Role = 'ADMIN' | 'DOCTOR' | 'PATIENT';
         <div class="alert alert-error" *ngIf="error()">{{ error() }}</div>
 
         <button type="submit" class="btn btn-primary btn-block btn-lg" [disabled]="loading()">
-          <span *ngIf="!loading()">Sign in as {{ role() | titlecase }}</span>
+          <span *ngIf="!loading()">Sign in as {{ labelFor(role()) }}</span>
           <span *ngIf="loading()">Signing in…</span>
         </button>
 
@@ -77,20 +79,22 @@ type Role = 'ADMIN' | 'DOCTOR' | 'PATIENT';
   `,
   styles: [`
     .role-switch {
-      display: grid; grid-template-columns: repeat(3, 1fr);
+      display: grid; gap: 4px;
       background: var(--color-surface-alt);
       padding: 4px;
       border-radius: var(--radius-md);
       margin-bottom: 20px;
     }
+    .role-switch-4 { grid-template-columns: repeat(4, 1fr); }
+    @media (max-width: 520px) { .role-switch-4 { grid-template-columns: repeat(2, 1fr); } }
     .role-switch button {
-      padding: 10px 8px;
+      padding: 10px 6px;
       border: none;
       background: transparent;
       border-radius: var(--radius-sm);
       font-family: var(--font-sans);
       font-weight: 600;
-      font-size: 13px;
+      font-size: 12.5px;
       cursor: pointer;
       color: var(--color-text-muted);
       transition: all 0.15s ease;
@@ -106,10 +110,11 @@ type Role = 'ADMIN' | 'DOCTOR' | 'PATIENT';
 export class LoginComponent {
   private readonly fb = inject(FormBuilder).nonNullable;
   private readonly auth = inject(AuthService);
+  private readonly tokens = inject(TokenService);
   private readonly router = inject(Router);
 
-  readonly roles: Role[] = ['ADMIN', 'DOCTOR', 'PATIENT'];
-  readonly role = signal<Role>('ADMIN');
+  readonly roles: Role[] = ['SUPER_ADMIN', 'ADMIN', 'DOCTOR', 'PATIENT'];
+  readonly role = signal<Role>('SUPER_ADMIN');
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
 
@@ -118,9 +123,27 @@ export class LoginComponent {
     password: ['', Validators.required]
   });
 
+  labelFor(r: Role): string {
+    return ({
+      SUPER_ADMIN: 'Super Admin',
+      ADMIN:       'Admin',
+      DOCTOR:      'Doctor',
+      PATIENT:     'Patient'
+    } as Record<Role, string>)[r];
+  }
+
+  emailPlaceholder(): string {
+    return this.role() === 'SUPER_ADMIN' ? 'admin@medicare.com' : 'you@hospital.com';
+  }
+
   setRole(r: Role) {
     this.role.set(r);
     this.error.set(null);
+    if (this.role() === 'SUPER_ADMIN' && !this.form.controls['email'].value) {
+      this.form.patchValue({ email: 'admin@medicare.com', password: 'admin' });
+    } else {
+      this.form.patchValue({ email: '', password: '' });
+    }
   }
 
   submit() {
@@ -133,15 +156,20 @@ export class LoginComponent {
     const { email, password } = this.form.value as { email: string; password: string };
     const role = this.role();
 
-    const obs = role === 'ADMIN'   ? this.auth.adminLogin({ email, password })
-              : role === 'DOCTOR'  ? this.auth.doctorLogin({ email, password })
-                                   : this.auth.patientLogin({ email, password });
+    const obs = role === 'SUPER_ADMIN' ? this.auth.superAdminLogin({ email, password })
+              : role === 'ADMIN'       ? this.auth.adminLogin({ email, password })
+              : role === 'DOCTOR'      ? this.auth.doctorLogin({ email, password })
+                                       : this.auth.patientLogin({ email, password });
 
     obs.subscribe({
       next: (res) => {
         this.loading.set(false);
         const user = (res as any).user || (res as any).data?.user;
-        this.router.navigate([`/${user.role.toLowerCase()}`]);
+        const target = user.role === 'SUPER_ADMIN' ? '/super-admin'
+                     : user.role === 'ADMIN'       ? '/admin'
+                     : user.role === 'DOCTOR'      ? '/doctor'
+                                                   : '/patient';
+        this.router.navigate([target]);
       },
       error: (err) => {
         this.loading.set(false);

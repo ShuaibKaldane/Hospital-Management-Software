@@ -3,7 +3,7 @@ require("dotenv").config();
 
 /**
  * Verify JWT from Authorization header.
- * Attaches decoded payload to req.user.
+ * Attaches decoded payload to req.user (id, role, hospital_id).
  */
 const authenticate = (req, res, next) => {
     try {
@@ -22,7 +22,8 @@ const authenticate = (req, res, next) => {
 
         req.user = {
             id: decoded.id,
-            role: decoded.role
+            role: decoded.role,
+            hospital_id: decoded.hospital_id ?? null
         };
 
         return next();

@@ -6,6 +6,7 @@ const errorHandler = require("./middleware/error.middleware");
 
 const authRoutes         = require("./routes/auth.routes");
 const adminRoutes        = require("./routes/admin.routes");
+const superAdminRoutes   = require("./routes/superAdmin.routes");
 const doctorRoutes       = require("./routes/doctor.routes");
 const patientRoutes      = require("./routes/patient.routes");
 const categoryRoutes     = require("./routes/doctorCategory.routes");
@@ -21,11 +22,12 @@ app.use(express.urlencoded({ extended: true }));
 
 // --- Health check ---
 app.get("/", (req, res) => {
-    res.send("🏥 Hospital API Running...");
+    res.send("Hospital API Running...");
 });
 
 // --- API routes ---
 app.use("/api/auth",              authRoutes);
+app.use("/api/super-admin",       superAdminRoutes);
 app.use("/api/admin",             adminRoutes);
 app.use("/api/doctor",            doctorRoutes);
 app.use("/api/patient",           patientRoutes);
@@ -49,11 +51,11 @@ const PORT = process.env.PORT || 5000;
 migrate()
   .then(() => {
     app.listen(PORT, () => {
-      console.log(`🚀 Hospital API running on port ${PORT}`);
+      console.log(`Hospital API running on port ${PORT}`);
     });
   })
   .catch(err => {
-    console.error('❌ Migration failed, refusing to start:', err.message);
+    console.error('Migration failed, refusing to start:', err.message);
     process.exit(1);
   });
 

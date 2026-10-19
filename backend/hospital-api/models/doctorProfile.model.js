@@ -2,9 +2,12 @@ const pool = require("../config/database");
 
 /**
  * Create a doctor profile. user_id must already exist in users.
+ * `hospital_id` should match the doctor's hospital so the row is
+ * scoped to the tenant.
  */
 const create = async ({
     user_id,
+    hospital_id = null,
     category_id,
     qualification,
     experience = 0,
@@ -15,11 +18,12 @@ const create = async ({
 }) => {
     const [result] = await pool.execute(
         `INSERT INTO doctor_profiles
-            (user_id, category_id, qualification, experience,
+            (user_id, hospital_id, category_id, qualification, experience,
              consultation_fee, phone, address, profile_image)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
             user_id,
+            hospital_id,
             category_id,
             qualification,
             experience,
@@ -43,6 +47,7 @@ const findByUserId = async (userId) => {
             u.name,
             u.email,
             u.status,
+            u.hospital_id,
             dp.id           AS profile_id,
             dp.category_id,
             dc.category_name,
@@ -66,10 +71,11 @@ const findByUserId = async (userId) => {
 };
 
 /**
- * List doctors with filters: status, category_id, search by name.
+ * List doctors with filters: status, category_id, search by name,
+ * and optional hospital_id for tenant scoping.
  * Supports pagination.
  */
-const findAll = async ({ status, category_id, search, limit = 20, offset = 0 } = {}) => {
+const findAll = async ({ status, category_id, search, hospital_id, limit = 20, offset = 0 } = {}) => {
     const where = ["u.role = 'DOCTOR'"];
     const params = [];
 
@@ -85,6 +91,10 @@ const findAll = async ({ status, category_id, search, limit = 20, offset = 0 } =
         where.push("u.name LIKE ?");
         params.push(`%${search}%`);
     }
+    if (hospital_id) {
+        where.push("u.hospital_id = ?");
+        params.push(hospital_id);
+    }
 
     const [rows] = await pool.execute(
         `SELECT
@@ -92,6 +102,8 @@ const findAll = async ({ status, category_id, search, limit = 20, offset = 0 } =
             u.name,
             u.email,
             u.status,
+            u.hospital_id,
+            h.name          AS hospital_name,
             dp.category_id,
             dc.category_name,
             dp.qualification,
@@ -102,6 +114,7 @@ const findAll = async ({ status, category_id, search, limit = 20, offset = 0 } =
          FROM users u
          JOIN doctor_profiles dp   ON dp.user_id = u.id
          JOIN doctor_categories dc ON dc.id = dp.category_id
+         LEFT JOIN hospitals h     ON h.id = u.hospital_id
          WHERE ${where.join(" AND ")}
          ORDER BY u.created_at DESC
          LIMIT ? OFFSET ?`,

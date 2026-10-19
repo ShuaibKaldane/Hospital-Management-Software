@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { DoctorService } from '../../core/services/doctor.service';
+import { HospitalService, HospitalOption } from '../../core/services/hospital.service';
 import { DoctorCategory } from '../../core/models/doctor.model';
 
 @Component({
@@ -20,10 +21,10 @@ import { DoctorCategory } from '../../core/models/doctor.model';
         <h1>Join as a Doctor.</h1>
         <p>Build your digital practice. Patients can find you, book consultations, and you manage everything from one dashboard.</p>
         <ul>
-          <li>Admin approval required</li>
+          <li>Apply to a specific hospital</li>
+          <li>Hospital admin approval required</li>
           <li>Set your own consultation fee</li>
           <li>Manage appointments &amp; prescriptions</li>
-          <li>Track earnings in real time</li>
         </ul>
       </div>
       <div style="font-size:12px;color:rgba(255,255,255,0.6);position:relative;z-index:2">
@@ -34,7 +35,15 @@ import { DoctorCategory } from '../../core/models/doctor.model';
     <div class="auth-form-wrap">
       <form class="auth-form" [formGroup]="form" (ngSubmit)="submit()">
         <h2>Doctor application</h2>
-        <p class="subtitle">Your account stays pending until an admin approves you.</p>
+        <p class="subtitle">Your account stays pending until the hospital admin approves you.</p>
+
+        <div class="form-group">
+          <label class="form-label">Hospital</label>
+          <select class="form-control" formControlName="hospital_id">
+            <option value="">Select hospital</option>
+            <option *ngFor="let h of hospitals()" [value]="h.id">{{ h.hospitalName }}<span *ngIf="h.city"> · {{ h.city }}</span></option>
+          </select>
+        </div>
 
         <div class="form-row">
           <div class="form-group">
@@ -103,6 +112,7 @@ export class DoctorSignupComponent implements OnInit {
   private readonly fb    = inject(FormBuilder).nonNullable;
   private readonly auth  = inject(AuthService);
   private readonly docs  = inject(DoctorService);
+  private readonly hospitalsSvc = inject(HospitalService);
   private readonly router = inject(Router);
 
   readonly loading = signal(false);
@@ -110,8 +120,10 @@ export class DoctorSignupComponent implements OnInit {
   readonly info    = signal<string | null>(null);
 
   categories: DoctorCategory[] = [];
+  hospitals = signal<HospitalOption[]>([]);
 
   form: FormGroup = this.fb.group({
+    hospital_id:      ['', Validators.required],
     name:             ['', Validators.required],
     email:            ['', [Validators.required, Validators.email]],
     password:         ['', [Validators.required, Validators.minLength(6)]],
@@ -127,6 +139,7 @@ export class DoctorSignupComponent implements OnInit {
     this.docs.listCategories().subscribe({
       next: cs => this.categories = cs
     });
+    this.hospitals.set(this.hospitalsSvc.hospitals());
   }
 
   submit(): void {
@@ -138,10 +151,16 @@ export class DoctorSignupComponent implements OnInit {
     this.error.set(null);
     this.info.set(null);
 
-    this.auth.doctorSignup(this.form.value).subscribe({
+    const v = this.form.value as any;
+    const payload = {
+      ...v,
+      hospital_id: Number(v.hospital_id)
+    };
+
+    this.auth.doctorSignup(payload).subscribe({
       next: () => {
         this.loading.set(false);
-        this.info.set('Application submitted! The admin will review and approve your account. You will be able to sign in once approved.');
+        this.info.set('Application submitted! The hospital admin will review and approve your account. You will be able to sign in once approved.');
         this.form.reset();
       },
       error: (err) => {

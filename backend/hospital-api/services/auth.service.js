@@ -10,7 +10,7 @@ const validators = require("../utils/validators.util");
 
 const generateToken = (user) => {
     return jwt.sign(
-        { id: user.id, role: user.role },
+        { id: user.id, role: user.role, hospital_id: user.hospital_id || null },
         process.env.JWT_SECRET,
         { expiresIn: process.env.JWT_EXPIRES_IN }
     );
@@ -21,7 +21,8 @@ const sanitizeUser = (user) => ({
     name: user.name,
     email: user.email,
     role: user.role,
-    status: user.status
+    status: user.status,
+    hospital_id: user.hospital_id ?? null
 });
 
 const loginByRole = async (data, expectedRole) => {
@@ -49,6 +50,10 @@ const loginByRole = async (data, expectedRole) => {
     return { token, user: sanitizeUser(user) };
 };
 
+const superAdminLogin = async (data) => {
+    return loginByRole(data, "SUPER_ADMIN");
+};
+
 const adminLogin = async (data) => {
     return loginByRole(data, "ADMIN");
 };
@@ -63,7 +68,8 @@ const patientLogin = async (data) => {
 
 /**
  * Doctor signup.
- * Creates user (status = PENDING) + doctor_profile in one flow.
+ * Requires a hospital_id (from the marketing site) so the doctor is
+ * scoped to a tenant. status = PENDING until the hospital admin approves.
  */
 const doctorSignup = async (data) => {
     validators.requireFields(data, [
@@ -71,7 +77,8 @@ const doctorSignup = async (data) => {
         "email",
         "password",
         "category_id",
-        "qualification"
+        "qualification",
+        "hospital_id"
     ]);
 
     if (!validators.isEmail(data.email)) {
@@ -89,11 +96,13 @@ const doctorSignup = async (data) => {
         email: data.email,
         password: data.password,
         role: "DOCTOR",
-        status: "PENDING"
+        status: "PENDING",
+        hospital_id: data.hospital_id
     });
 
     await doctorProfileModel.create({
         user_id: userId,
+        hospital_id: data.hospital_id,
         category_id: data.category_id,
         qualification: data.qualification,
         experience: data.experience || 0,
@@ -105,16 +114,17 @@ const doctorSignup = async (data) => {
     return {
         user_id: userId,
         status: "PENDING",
-        message: "Registration successful. Awaiting admin approval."
+        message: "Registration successful. Awaiting hospital admin approval."
     };
 };
 
 /**
  * Patient signup.
- * Creates user (status = ACTIVE) + patient_profile.
+ * Requires a hospital_id. status = ACTIVE — patients can use the
+ * system immediately after registering with a hospital.
  */
 const patientSignup = async (data) => {
-    validators.requireFields(data, ["name", "email", "password"]);
+    validators.requireFields(data, ["name", "email", "password", "hospital_id"]);
 
     if (!validators.isEmail(data.email)) {
         throw new ApiError(400, "Invalid email format");
@@ -128,11 +138,13 @@ const patientSignup = async (data) => {
         email: data.email,
         password: data.password,
         role: "PATIENT",
-        status: "ACTIVE"
+        status: "ACTIVE",
+        hospital_id: data.hospital_id
     });
 
     await patientProfileModel.create({
         user_id: userId,
+        hospital_id: data.hospital_id,
         age: data.age,
         gender: data.gender,
         blood_group: data.blood_group,
@@ -151,6 +163,7 @@ const patientSignup = async (data) => {
 };
 
 module.exports = {
+    superAdminLogin,
     adminLogin,
     doctorLogin,
     patientLogin,

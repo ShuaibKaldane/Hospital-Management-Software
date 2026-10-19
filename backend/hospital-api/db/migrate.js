@@ -115,6 +115,12 @@ async function migrate() {
     }
   }
 
+  // 3. Apply seed.sql once (uses INSERT IGNORE so it is safe to re-run).
+  const seedFile = path.join(root, 'seed.sql');
+  if (fs.existsSync(seedFile)) {
+    await executeFile('seed.sql', seedFile);
+  }
+
   console.log('✅ [migrate] Database is up to date');
 }
 

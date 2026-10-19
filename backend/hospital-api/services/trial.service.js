@@ -43,7 +43,7 @@ const generateTempPassword = (length = 12) => {
  * one time — that is the whole point of trial signup).
  */
 const activateTrial = async (data) => {
-    const { hospitalName, adminName, adminEmail, phone, city, address } = data;
+    const { hospitalName, adminName, adminEmail, phone, city, address, days = 7 } = data;
 
     validators.requireFields(data, [
         "hospitalName",
@@ -61,15 +61,20 @@ const activateTrial = async (data) => {
     if (existing) throw new ApiError(409, "Email already registered");
 
     const tempPassword = generateTempPassword(12);
+    const trialDays = Number(days) || 7;
+    const trialExpiresAt = new Date(Date.now() + trialDays * 24 * 60 * 60 * 1000);
 
+    // Step 1: create the admin user (no hospital yet).
     const adminUserId = await userModel.createUser({
         name: adminName,
         email: adminEmail,
         password: tempPassword,
         role: "ADMIN",
-        status: "ACTIVE"
+        status: "ACTIVE",
+        hospital_id: null
     });
 
+    // Step 2: create the hospital.
     const hospitalId = await hospitalModel.createHospital({
         name: hospitalName,
         city,
@@ -78,8 +83,12 @@ const activateTrial = async (data) => {
         admin_user_id: adminUserId,
         plan: "trial",
         trial: true,
-        trial_expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+        trial_expires_at: trialExpiresAt,
+        subscription_expires_at: null
     });
+
+    // Step 3: link the admin user back to the hospital.
+    await userModel.updateUserHospital(adminUserId, hospitalId);
 
     return {
         adminEmail,
@@ -90,7 +99,7 @@ const activateTrial = async (data) => {
         address: address || "",
         phone,
         plan: "trial",
-        trialExpiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        trialExpiresAt: trialExpiresAt.toISOString(),
         loginUrl: "/login"
     };
 };

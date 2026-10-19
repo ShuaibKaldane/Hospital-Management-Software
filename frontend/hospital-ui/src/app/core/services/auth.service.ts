@@ -14,6 +14,7 @@ interface DoctorSignup  extends LoginPayload {
   consultation_fee?: number;
   phone?: string;
   address?: string;
+  hospital_id: number;
 }
 
 interface PatientSignup extends LoginPayload {
@@ -23,12 +24,17 @@ interface PatientSignup extends LoginPayload {
   blood_group?: string;
   phone?: string;
   address?: string;
+  hospital_id: number;
 }
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly api    = inject(ApiService);
   private readonly tokens = inject(TokenService);
+
+  superAdminLogin(payload: LoginPayload): Observable<AuthResponse> {
+    return this.post('/auth/super-admin/login', payload);
+  }
 
   adminLogin(payload: LoginPayload): Observable<AuthResponse> {
     return this.post('/auth/admin/login', payload);

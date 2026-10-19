@@ -2,7 +2,7 @@ const pool = require("../config/database");
 
 /**
  * Find a user by email.
- * Used for admin, doctor and patient login.
+ * Returns hospital_id so the caller can scope subsequent queries.
  */
 const findUserByEmail = async (email) => {
     const query = `
@@ -12,7 +12,8 @@ const findUserByEmail = async (email) => {
             email,
             password,
             role,
-            status
+            status,
+            hospital_id
         FROM users
         WHERE email = ?
         LIMIT 1

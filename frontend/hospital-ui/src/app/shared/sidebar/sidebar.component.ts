@@ -105,8 +105,10 @@ export class SidebarComponent {
   readonly role = computed(() => this.tokens.user()?.role ?? 'GUEST');
 
   readonly rolePath = computed(() => {
-    const r = this.tokens.user()?.role?.toLowerCase();
-    return r ?? '';
+    const r = this.tokens.user()?.role;
+    if (!r) return '';
+    if (r === 'SUPER_ADMIN') return 'super-admin';
+    return r.toLowerCase();
   });
 
   readonly items = computed<NavItem[]>(() => {
@@ -123,10 +125,20 @@ export class SidebarComponent {
     const BOOK = ICON('<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>');
     const CHART = ICON('<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>');
 
+    if (r === 'SUPER_ADMIN') {
+      return [
+        { label: 'Dashboard',   link: '/super-admin',          icon: DASH },
+        { label: 'Hospitals',   link: '/super-admin/hospitals', icon: USERS },
+        { label: 'Doctors',     link: '/super-admin/doctors',   icon: USERS },
+        { label: 'Patients',    link: '/super-admin/patients',  icon: USERS },
+        { label: 'Payments',    link: '/super-admin/payments',  icon: MONEY }
+      ];
+    }
     if (r === 'ADMIN') {
       return [
         { label: 'Dashboard',   link: '/admin',          icon: DASH },
         { label: 'Doctors',     link: '/admin/doctors',  icon: USERS },
+        { label: 'Patients',    link: '/admin/patients', icon: USERS },
         { label: 'Categories',  link: '/admin/categories', icon: TAG },
         { label: 'Appointments',link: '/admin/appointments', icon: CAL },
         { label: 'Payments',    link: '/admin/payments', icon: MONEY },
