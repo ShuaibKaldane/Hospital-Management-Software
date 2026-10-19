@@ -17,6 +17,58 @@ import { GST_RATE, PLAN_ORDER, PLANS } from '../../../core/services/marketing-st
       </div>
 
       <div class="mkt-pricing">
+        <!-- Free trial card (separate from PAID plans since it has no monthly fee) -->
+        <div class="mkt-plan mkt-plan--trial">
+          <span class="mkt-plan__trial-tag">7 days</span>
+
+          <h3 class="mkt-plan__name">Free Trial</h3>
+          <div class="mkt-plan__tag">Try MediCare+ for 7 days, no card required.</div>
+
+          <div class="mkt-plan__price">
+            <span class="amount num">₹0</span>
+            <span class="per">/7 days</span>
+          </div>
+
+          <div class="mkt-plan__gst">
+            No credit card &nbsp;·&nbsp; cancel anytime
+          </div>
+
+          <div class="mkt-plan__rule"></div>
+
+          <ul class="mkt-plan__list">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Up to 5 doctors</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Up to 50 patients</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Appointment booking &amp; reminders</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Email support</span>
+            </li>
+            <li class="is-off">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              <span>Salary &amp; payroll</span>
+            </li>
+            <li class="is-off">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              <span>Custom integrations</span>
+            </li>
+          </ul>
+
+          <a routerLink="/marketing/trial"
+             class="mkt-btn mkt-btn--block mkt-btn--lg mkt-btn--primary">
+            Start free trial
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+
         @for (id of order; track id) {
           @let plan = plans[id];
           @let isPopular = plan.popular;

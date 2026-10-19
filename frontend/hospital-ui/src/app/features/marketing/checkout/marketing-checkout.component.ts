@@ -1,4 +1,13 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  ViewChild,
+  inject,
+  signal
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -43,6 +52,19 @@ interface CheckoutFormShape {
 
         <!-- LEFT: forms -->
         <div>
+          <!-- Free-trial cross-sell -->
+          <div class="mkt-trial-banner">
+            <div class="mkt-trial-banner__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="10"/>
+              </svg>
+            </div>
+            <div class="mkt-trial-banner__body">
+              <strong>Not ready to commit?</strong>
+              Start a <a routerLink="/marketing/trial">7-day free trial</a> instead — no card details needed.
+            </div>
+          </div>
+
           <!-- 1. Hospital info -->
           <div class="mkt-card">
             <h3 class="mkt-card__title">1. Hospital details</h3>
@@ -124,35 +146,79 @@ interface CheckoutFormShape {
         <!-- RIGHT: summary -->
         <div>
           <div class="mkt-summary">
-            <h3 class="mkt-card__title" style="margin-bottom:6px;">Order summary</h3>
-            <p class="mkt-card__sub">You're activating the <strong style="color:var(--mkt-ink);">{{ plan.name }}</strong> plan.</p>
+            <div class="mkt-summary__head">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+              </svg>
+              Order summary
+            </div>
 
             <div class="mkt-summary__row">
-              <span>Plan</span>
+              <span class="label">Plan</span>
               <span class="amount">{{ plan.name }}</span>
             </div>
             <div class="mkt-summary__row">
-              <span>Monthly</span>
+              <span class="label">Billing cycle</span>
+              <span class="amount">{{ cycle() === 'annual' ? 'Annual · saved 17%' : 'Monthly' }}</span>
+            </div>
+            <div class="mkt-summary__row">
+              <span class="label">Monthly</span>
               <span class="amount">{{ formatINR(monthly()) }}</span>
             </div>
             <div class="mkt-summary__row">
-              <span>GST ({{ (gstRate * 100).toFixed(0) }}%)</span>
+              <span class="label">GST ({{ (gstRate * 100).toFixed(0) }}%)</span>
               <span class="amount">{{ formatINR(gstAmt()) }}</span>
             </div>
             <div class="mkt-summary__row mkt-summary__total">
-              <span>Total today</span>
+              <span class="label">Total today</span>
               <span class="amount">{{ formatINR(total()) }}</span>
             </div>
 
-            <div style="margin-top:22px;">
-              <label style="font-size:0.85rem; font-weight:600; color:var(--mkt-ink-2); margin-bottom:8px; display:block;">Billing cycle</label>
-              <select formControlName="cycle" class="mkt-field" style="margin-bottom:0;">
-                <option value="monthly">Monthly · best for trying out</option>
-                <option value="annual">Annual · save up to 20%</option>
-              </select>
+            <div class="mkt-summary__cycle" #cycleWrap>
+              <label id="cycle-label">Billing cycle</label>
+              <button type="button"
+                      class="mkt-cycle"
+                      [class.is-open]="cycleOpen()"
+                      [attr.aria-expanded]="cycleOpen()"
+                      aria-labelledby="cycle-label"
+                      #cycleBtn
+                      (click)="toggleCycle($event)">
+                <span>{{ cycle() === 'annual' ? 'Annual — save up to 17%' : 'Monthly — best for trying out' }}</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"/>
+                </svg>
+              </button>
+
+              @if (cycleOpen()) {
+                <ul class="mkt-cycle__menu" role="listbox" aria-labelledby="cycle-label"
+                    [style.top.px]="cycleMenuTop()"
+                    [style.left.px]="cycleMenuLeft()"
+                    [style.width.px]="cycleMenuWidth()">
+                  <li role="option"
+                      [class.is-selected]="cycle() === 'monthly'"
+                      [attr.aria-selected]="cycle() === 'monthly'"
+                      (click)="selectCycle('monthly')">
+                    <span class="mkt-cycle__opt-label">Monthly</span>
+                    <span class="mkt-cycle__opt-sub">Best for trying out</span>
+                    @if (cycle() === 'monthly') {
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="mkt-cycle__check"><polyline points="20 6 9 17 4 12"/></svg>
+                    }
+                  </li>
+                  <li role="option"
+                      [class.is-selected]="cycle() === 'annual'"
+                      [attr.aria-selected]="cycle() === 'annual'"
+                      (click)="selectCycle('annual')">
+                    <span class="mkt-cycle__opt-label">Annual</span>
+                    <span class="mkt-cycle__opt-sub">Save up to 17%</span>
+                    @if (cycle() === 'annual') {
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="mkt-cycle__check"><polyline points="20 6 9 17 4 12"/></svg>
+                    }
+                  </li>
+                </ul>
+              }
             </div>
 
-            <button type="submit" class="mkt-btn mkt-btn--primary mkt-btn--block mkt-btn--lg mkt-mt-20"
+            <button type="submit" class="mkt-btn mkt-btn--primary mkt-btn--block mkt-btn--lg"
                     [disabled]="submitting()">
               @if (submitting()) {
                 <span>Processing…</span>
@@ -162,9 +228,19 @@ interface CheckoutFormShape {
               }
             </button>
 
-            <p class="mkt-text-center" style="font-size:12px; color:var(--mkt-ink-5); margin:14px 0 0;">
-              By continuing you agree to our terms. Cancel anytime — first 7 days free.
+            <p class="mkt-summary__terms">
+              By completing this purchase you agree to our terms. Cancel anytime — first 7 days free.
             </p>
+
+            <div class="mkt-summary__trial">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+              </svg>
+              <div>
+                <strong>Want to try first?</strong>
+                <a routerLink="/marketing/trial">Start a 7-day free trial</a> — no card details.
+              </div>
+            </div>
           </div>
         </div>
 
@@ -189,6 +265,61 @@ export class MarketingCheckoutComponent implements OnInit {
   readonly monthly = signal(PLANS.professional.monthly);
   readonly gstAmt  = signal(Math.round(PLANS.professional.monthly * GST_RATE));
   readonly total   = signal(PLANS.professional.monthly + Math.round(PLANS.professional.monthly * GST_RATE));
+
+  /** Helper for the summary template. */
+  cycle(): 'monthly' | 'annual' {
+    return (this.form.controls['cycle'].value as 'monthly' | 'annual') ?? 'monthly';
+  }
+
+  /** Custom billing-cycle dropdown state (replaces native <select>). */
+  cycleOpen = signal(false);
+  cycleMenuTop    = signal(0);
+  cycleMenuLeft   = signal(0);
+  cycleMenuWidth  = signal(0);
+
+  @ViewChild('cycleBtn', { static: false }) cycleBtnRef?: ElementRef<HTMLElement>;
+
+  /** Toggle the menu and (re)compute its fixed-position coordinates. */
+  toggleCycle(event?: MouseEvent): void {
+    event?.stopPropagation();
+    if (this.cycleOpen()) {
+      this.cycleOpen.set(false);
+      return;
+    }
+    const btn = this.cycleBtnRef?.nativeElement;
+    if (btn) {
+      const r = btn.getBoundingClientRect();
+      this.cycleMenuTop.set(Math.round(r.bottom + 6));
+      this.cycleMenuLeft.set(Math.round(r.left));
+      this.cycleMenuWidth.set(Math.round(r.width));
+    }
+    this.cycleOpen.set(true);
+  }
+
+  /** Reposition on scroll/resize while open. */
+  @HostListener('window:scroll')
+  @HostListener('window:resize')
+  repositionCycle(): void {
+    if (!this.cycleOpen()) return;
+    const btn = this.cycleBtnRef?.nativeElement;
+    if (!btn) return;
+    const r = btn.getBoundingClientRect();
+    this.cycleMenuTop.set(Math.round(r.bottom + 6));
+    this.cycleMenuLeft.set(Math.round(r.left));
+    this.cycleMenuWidth.set(Math.round(r.width));
+  }
+
+  /** Close the dropdown when the user clicks anywhere outside the menu/button. */
+  @HostListener('document:click')
+  closeCycle(): void {
+    if (this.cycleOpen()) this.cycleOpen.set(false);
+  }
+
+  /** Choose a cycle and close the menu. */
+  selectCycle(c: 'monthly' | 'annual'): void {
+    this.form.controls['cycle'].setValue(c);
+    this.cycleOpen.set(false);
+  }
 
   form: FormGroup = this.fb.group({
     hospitalName: ['', Validators.required],

@@ -518,6 +518,13 @@ interface UseCase {
       </div>
 
       <div class="mkt-mini-plans">
+        <div class="mkt-mini-plan mkt-mini-plan--trial">
+          <div class="ribbon ribbon--trial">7 days</div>
+          <div class="name">Free Trial</div>
+          <div class="price"><span class="cur">₹</span><span class="amt num">0</span><span class="per">/7 days</span></div>
+          <div class="tag">No card required. Cancel anytime.</div>
+          <a routerLink="/marketing/trial" class="mkt-btn mkt-btn--primary mkt-btn--block">Start free trial</a>
+        </div>
         <div class="mkt-mini-plan">
           <div class="name">Basic</div>
           <div class="price"><span class="cur">₹</span><span class="amt num">4,999</span><span class="per">/mo</span></div>

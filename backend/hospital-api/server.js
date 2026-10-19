@@ -10,6 +10,7 @@ const doctorRoutes       = require("./routes/doctor.routes");
 const patientRoutes      = require("./routes/patient.routes");
 const categoryRoutes     = require("./routes/doctorCategory.routes");
 const trialRoutes        = require("./routes/trial.routes");
+const { migrate }        = require("./db/migrate");
 
 const app = express();
 
@@ -42,10 +43,18 @@ app.use((req, res) => {
 // --- Centralized error handler (must be last) ---
 app.use(errorHandler);
 
-// --- Start server ---
+// --- Start server (after database migrations) ---
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`🚀 Hospital API running on port ${PORT}`);
-});
+
+migrate()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`🚀 Hospital API running on port ${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('❌ Migration failed, refusing to start:', err.message);
+    process.exit(1);
+  });
 
 module.exports = app;
