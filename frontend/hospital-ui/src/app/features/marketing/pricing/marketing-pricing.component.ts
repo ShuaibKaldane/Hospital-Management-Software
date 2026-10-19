@@ -205,11 +205,17 @@ import { GST_RATE, PLAN_ORDER, PLANS } from '../../../core/services/marketing-st
   <section class="mkt-section mkt-section--alt">
     <div class="mkt-container">
       <div class="mkt-cta">
-        <h2>Still deciding?</h2>
-        <p>Start with our most popular plan, <strong>Professional</strong>. Cancel anytime — no lock-in, no questions.</p>
-        <a routerLink="/marketing/checkout" [queryParams]="{plan: 'professional'}" class="mkt-btn mkt-btn--accent mkt-btn--lg">
-          Get Professional — ₹14,999 / month
-        </a>
+        <h2>Try it free for 7 days.</h2>
+        <p>No credit card. No payment. Start your trial and explore the platform with full admin access.</p>
+        <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+          <a routerLink="/marketing/trial" class="mkt-btn mkt-btn--primary mkt-btn--lg">
+            Start 7-day free trial
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px;"><polyline points="20 6 9 17 4 12"/></svg>
+          </a>
+          <a routerLink="/marketing/checkout" [queryParams]="{plan: 'professional'}" class="mkt-btn mkt-btn--accent mkt-btn--lg">
+            Get Professional — ₹14,999 / month
+          </a>
+        </div>
       </div>
     </div>
   </section>

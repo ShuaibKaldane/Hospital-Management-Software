@@ -21,6 +21,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
       <nav class="mkt-nav__links">
         <a routerLink="/marketing"        routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="mkt-nav__link">Home</a>
         <a routerLink="/marketing/pricing" routerLinkActive="active" class="mkt-nav__link">Pricing</a>
+        <a routerLink="/marketing/trial"   routerLinkActive="active" class="mkt-nav__link">Free trial</a>
         <a routerLink="/marketing/checkout" routerLinkActive="active" class="mkt-nav__link">Buy plan</a>
       </nav>
 

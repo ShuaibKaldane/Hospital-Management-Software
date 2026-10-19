@@ -29,6 +29,11 @@ export const MARKETING_ROUTES: Routes = [
         data: { title: 'Checkout — MediCare+' }
       },
       {
+        path: 'trial',
+        loadComponent: () => import('./trial/marketing-trial.component').then(m => m.MarketingTrialComponent),
+        data: { title: 'Start your 7-day free trial — MediCare+' }
+      },
+      {
         path: 'success',
         loadComponent: () => import('./success/marketing-success.component').then(m => m.MarketingSuccessComponent),
         data: { title: 'You\'re activated — MediCare+' }
