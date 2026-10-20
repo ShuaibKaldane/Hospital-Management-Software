@@ -153,6 +153,9 @@ export class PatientReportsComponent implements OnInit {
 
   fileUrl(r: PatientReport): string {
     const base = environment.apiBaseUrl.replace(/\/api$/, '');
-    return `${base}/${r.file_path.replace(/\\/g, '/')}`;
+      // Backend now stores only the basename (`req.file.filename`).
+    // Serve from `/uploads/` static folder.
+    const filename = r.file_path.split(/[\\/]/).pop() || '';
+    return `${base}/uploads/${filename}`;
   }
 }
