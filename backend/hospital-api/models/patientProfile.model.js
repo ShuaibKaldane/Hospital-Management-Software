@@ -70,6 +70,11 @@ const findAll = async ({ status, search, hospital_id, limit = 20, offset = 0 } =
         params.push(hospital_id);
     }
 
+    // LIMIT/OFFSET inlined because mysql2's `execute` (prepared-statement
+    // mode) does not support placeholders for these on most server versions.
+    const safeLimit  = Math.max(0, Math.min(Number(limit)  || 20, 200));
+    const safeOffset = Math.max(0, Math.floor(Number(offset) || 0));
+
     const [rows] = await pool.execute(
         `SELECT
             u.id      AS user_id,
@@ -88,8 +93,8 @@ const findAll = async ({ status, search, hospital_id, limit = 20, offset = 0 } =
          LEFT JOIN hospitals h    ON h.id = u.hospital_id
          WHERE ${where.join(" AND ")}
          ORDER BY u.created_at DESC
-         LIMIT ? OFFSET ?`,
-        [...params, Number(limit), Number(offset)]
+         LIMIT ${safeLimit} OFFSET ${safeOffset}`,
+        params
     );
 
     return rows;
