@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, ElementRef, viewChild, afterNextRender } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -39,7 +39,7 @@ import { DoctorCategory } from '../../core/models/doctor.model';
 
         <div class="form-group">
           <label class="form-label">Hospital</label>
-          <select class="form-control" #hospitalSel (change)="selectedHospitalId.set($any(hospitalSel).value)">
+          <select class="form-control" #hospitalSel>
             <option value="">Select hospital</option>
             <option *ngFor="let h of hospitals()" [value]="h.id">{{ h.hospitalName }}{{ h.city ? ' · ' + h.city : '' }}</option>
           </select>
@@ -119,6 +119,19 @@ export class DoctorSignupComponent implements OnInit {
   readonly error   = signal<string | null>(null);
   readonly info    = signal<string | null>(null);
   readonly selectedHospitalId = signal<string>('');
+
+  private readonly hospitalSel = viewChild<ElementRef<HTMLSelectElement>>('hospitalSel');
+
+  constructor() {
+    afterNextRender(() => {
+      const el = this.hospitalSel()?.nativeElement;
+      if (!el) return;
+      el.value = this.selectedHospitalId();
+      el.addEventListener('change', () => {
+        this.selectedHospitalId.set(el.value);
+      });
+    });
+  }
 
   categories: DoctorCategory[] = [];
   readonly hospitals = this.hospitalsSvc.hospitals;

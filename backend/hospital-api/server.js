@@ -11,6 +11,7 @@ const doctorRoutes       = require("./routes/doctor.routes");
 const patientRoutes      = require("./routes/patient.routes");
 const categoryRoutes     = require("./routes/doctorCategory.routes");
 const trialRoutes        = require("./routes/trial.routes");
+const publicRoutes       = require("./routes/public.routes");
 const { migrate }        = require("./db/migrate");
 
 const app = express();
@@ -26,6 +27,7 @@ app.get("/", (req, res) => {
 });
 
 // --- API routes ---
+app.use("/api",                   publicRoutes);
 app.use("/api/auth",              authRoutes);
 app.use("/api/super-admin",       superAdminRoutes);
 app.use("/api/admin",             adminRoutes);

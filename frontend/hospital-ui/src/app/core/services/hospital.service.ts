@@ -64,8 +64,12 @@ export class HospitalService {
   refresh(): void {
     this.api.get<BackendHospital[]>('/hospitals').subscribe({
       next: (rows) => {
-        const fromApi   = rows.map(this.fromBackend);
-        const fromStore = this.store.hospitals().map(this.toOption);
+        const fromApi   = rows.map(this.fromBackend).filter(this.isNumericId);
+        const fromStore = this.store.hospitals()
+          .map(this.toOption)
+          // The backend only accepts FK ids from `hospitals.id` (BIGINT).
+          // Marketing localStorage entries use slug ids and would fail signup.
+          .filter(this.isNumericId);
 
         // Dedupe by id; backend wins.
         const byId = new Map<string, HospitalOption>();
@@ -76,10 +80,18 @@ export class HospitalService {
       },
       error: () => {
         // Backend down — keep whatever we already have.
-        this.hospitals.set(this.store.hospitals().map(this.toOption));
+        this.hospitals.set(
+          this.store.hospitals().map(this.toOption).filter(this.isNumericId)
+        );
       }
     });
   }
+
+  /** Keep only ids that look like a positive integer (DB-backed hospitals). */
+  private readonly isNumericId = (h: HospitalOption): boolean => {
+    const n = Number(h.id);
+    return Number.isFinite(n) && n > 0 && String(n) === h.id;
+  };
 
   getById(id: string): HospitalOption | undefined {
     return this.hospitals().find(h => h.id === id);
