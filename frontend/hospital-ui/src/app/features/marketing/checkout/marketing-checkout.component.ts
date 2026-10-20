@@ -19,6 +19,14 @@ import {
   Plan,
   PlanId
 } from '../../../core/services/marketing-store.service';
+import { CheckoutService } from '../../../core/services/checkout.service';
+
+/** Marketing plan ids → backend plan ids. Backend uses 'pro' for Professional. */
+const PLAN_MAP: Record<PlanId, 'basic' | 'pro' | 'enterprise'> = {
+  basic:        'basic',
+  professional: 'pro',
+  enterprise:   'enterprise'
+};
 
 interface CheckoutFormShape {
   hospitalName: string;
@@ -254,8 +262,10 @@ export class MarketingCheckoutComponent implements OnInit {
   private readonly route   = inject(ActivatedRoute);
   private readonly router  = inject(Router);
   private readonly store   = inject(MarketingStoreService);
+  private readonly checkoutApi = inject(CheckoutService);
 
-  readonly submitting = signal(false);
+  readonly submitting  = signal(false);
+  readonly serverError = signal<string | null>(null);
   readonly gstRate    = GST_RATE;
   readonly formatINR  = (n: number) => this.store.formatINR(n);
 
@@ -375,45 +385,62 @@ export class MarketingCheckoutComponent implements OnInit {
     if (!valid) return;
 
     this.submitting.set(true);
+    this.serverError.set(null);
 
     const v = this.form.value as CheckoutFormShape;
-    const adminPassword = this.store.generatePassword(12);
-    const transactionId = this.store.generateTransactionId();
-    const hospitalSlug  = this.store.slugify(v.hospitalName);
-    const cycle         = v.cycle;
-    const monthlyAmount = this.store.monthlyFor(this.plan, cycle);
 
-    const record: HospitalRecord = {
-      id:             'HSP-' + Date.now().toString(36).toUpperCase(),
-      hospitalName:   v.hospitalName.trim(),
-      hospitalSlug,
-      city:           v.city.trim(),
-      address:        (v.address ?? '').trim(),
-      phone:          v.phone.trim(),
-      adminName:      v.adminName.trim(),
-      adminEmail:     v.adminEmail.trim(),
-      adminPassword,
-      planId:         this.plan.id,
-      planName:       this.plan.name,
-      planPrice:      monthlyAmount,
-      billingCycle:   cycle,
-      transactionId,
-      purchaseDate:   new Date().toISOString(),
-      loginUrl:       '/login'
-    };
+    this.checkoutApi.activate({
+      hospitalName: v.hospitalName.trim(),
+      adminName:    v.adminName.trim(),
+      adminEmail:   v.adminEmail.trim(),
+      phone:        v.phone.trim(),
+      city:         v.city.trim(),
+      address:      (v.address ?? '').trim(),
+      plan:         PLAN_MAP[this.plan.id],
+      days:         v.cycle === 'annual' ? 365 : 30
+    }).subscribe({
+      next: (res) => {
+        const transactionId = this.store.generateTransactionId();
+        const cycle         = v.cycle;
+        const monthlyAmount = this.store.monthlyFor(this.plan, cycle);
 
-    this.store.addHospital(record);
+        // Mirror record to local store with the DB-assigned numeric id so
+        // the doctor/patient signup dropdowns see the new tenant instantly.
+        const record: HospitalRecord = {
+          id:             String(res.hospitalId),
+          hospitalName:   res.hospitalName,
+          hospitalSlug:   this.store.slugify(res.hospitalName),
+          city:           res.city,
+          address:        res.address,
+          phone:          res.phone,
+          adminName:      v.adminName.trim(),
+          adminEmail:     res.adminEmail,
+          adminPassword:  res.adminPassword,
+          planId:         this.plan.id,
+          planName:       this.plan.name,
+          planPrice:      monthlyAmount,
+          billingCycle:   cycle,
+          transactionId,
+          purchaseDate:   new Date().toISOString(),
+          loginUrl:       res.loginUrl
+        };
+        this.store.addHospital(record);
 
-    // Pass via query string to success page
-    this.router.navigate(['/marketing/success'], {
-      queryParams: {
-        hospital:    record.hospitalName,
-        plan:        record.planId,
-        email:       record.adminEmail,
-        pass:        record.adminPassword,
-        txn:         record.transactionId,
-        city:        record.city,
-        price:       Math.round(record.planPrice)
+        this.router.navigate(['/marketing/success'], {
+          queryParams: {
+            hospital: record.hospitalName,
+            plan:     record.planId,
+            email:    record.adminEmail,
+            pass:     record.adminPassword,
+            txn:      record.transactionId,
+            city:     record.city,
+            price:    Math.round(record.planPrice)
+          }
+        });
+      },
+      error: (err) => {
+        this.submitting.set(false);
+        this.serverError.set(err?.message || 'Something went wrong. Please try again.');
       }
     });
   }
