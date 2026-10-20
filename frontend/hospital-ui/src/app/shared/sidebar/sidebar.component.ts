@@ -2,6 +2,7 @@ import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TokenService } from '../../core/services/token.service';
+import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
 
 interface NavItem {
   label: string;
@@ -12,7 +13,7 @@ interface NavItem {
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ThemeToggleComponent],
   template: `
   <aside class="sidebar">
     <div class="sidebar-header">
@@ -36,6 +37,7 @@ interface NavItem {
         <strong>Need help?</strong>
         <p>Reach support@medicare.app or call +91 800-MEDICARE.</p>
       </div>
+      <app-theme-toggle></app-theme-toggle>
     </div>
   </aside>
   `,

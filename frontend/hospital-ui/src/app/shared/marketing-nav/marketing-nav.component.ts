@@ -1,11 +1,12 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
 
 @Component({
   selector: 'mkt-nav',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterLink, RouterLinkActive, ThemeToggleComponent],
   template: `
   <header class="mkt-nav">
     <div class="mkt-nav__inner">
@@ -28,6 +29,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
       </nav>
 
       <div class="mkt-nav__actions">
+        <app-theme-toggle></app-theme-toggle>
         <a routerLink="/login" class="mkt-nav__signin">Sign in</a>
         <a routerLink="/marketing/pricing" class="mkt-btn mkt-btn--primary mkt-btn--sm">
           Get started
