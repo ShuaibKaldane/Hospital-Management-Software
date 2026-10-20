@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-stat-card',
@@ -7,7 +8,7 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
   <div class="stat-card" [style.--accent]="accent">
-    <div class="stat-icon" [innerHTML]="icon"></div>
+    <div class="stat-icon" [innerHTML]="safeIcon"></div>
     <div class="stat-body">
       <div class="stat-label">{{ label }}</div>
       <div class="stat-value">{{ value }}</div>
@@ -42,7 +43,14 @@ import { CommonModule } from '@angular/common';
       display: inline-flex; align-items: center; justify-content: center;
       flex-shrink: 0;
     }
-    .stat-icon svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2; }
+    .stat-icon ::ng-deep svg {
+      width: 24px; height: 24px;
+      stroke: currentColor !important;
+      fill: none !important;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
 
     .stat-body { flex: 1; min-width: 0; }
     .stat-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-text-subtle); font-weight: 600; }
@@ -51,9 +59,19 @@ import { CommonModule } from '@angular/common';
   `]
 })
 export class StatCardComponent {
+  private readonly sanitizer = inject(DomSanitizer);
+
   @Input() label = '';
   @Input() value: string | number | null = '';
   @Input() icon = '';
   @Input() accent = '#0E7490';
   @Input() trend?: string;
+
+  /** Angular's default sanitizer strips SVG attributes inside [innerHTML];
+   * bypass so `stroke="currentColor"` and friends survive. */
+  get safeIcon(): SafeHtml {
+    return this.icon
+      ? this.sanitizer.bypassSecurityTrustHtml(this.icon)
+      : '';
+  }
 }

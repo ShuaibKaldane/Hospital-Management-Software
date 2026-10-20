@@ -22,8 +22,12 @@ const getDoctorTransactions = wrap(async (req, res) => {
 });
 
 const getMyEarnings = wrap(async (req, res) => {
-    const data = await salaryService.getEarnings(req.user.id);
-    return success(res, 200, "Earnings summary fetched", data);
+    const doctorId = req.user.id;
+    const [summary, transactions] = await Promise.all([
+        salaryService.getEarnings(doctorId),
+        salaryService.getMyTransactions(doctorId)
+    ]);
+    return success(res, 200, "Earnings fetched", { ...summary, transactions });
 });
 
 const getAllTransactions = wrap(async (req, res) => {

@@ -27,11 +27,12 @@ import { EmptyStateComponent } from '../../shared/empty-state/empty-state.compon
         <div class="table-wrapper" *ngIf="transactions().length; else emptyTpl" style="border:none;box-shadow:none">
           <table class="data-table">
             <thead>
-              <tr><th>Date</th><th>Type</th><th>Reason</th><th class="text-right">Amount</th></tr>
+              <tr><th>Date</th><th>Patient</th><th>Type</th><th>Reason</th><th class="text-right">Amount</th></tr>
             </thead>
             <tbody>
               <tr *ngFor="let t of transactions()">
                 <td class="text-muted">{{ t.created_at | date:'mediumDate' }}</td>
+                <td class="text-muted">{{ t.patient_name || '—' }}</td>
                 <td><span class="badge" [class]="badgeFor(t.transaction_type)">{{ t.transaction_type }}</span></td>
                 <td class="text-muted">{{ t.reason || '—' }}</td>
                 <td class="text-right font-bold" [class.negative]="t.transaction_type === 'Deduction'">
@@ -61,28 +62,27 @@ export class DoctorEarningsComponent implements OnInit {
   readonly transactions = signal<SalaryTransaction[]>([]);
   readonly loading      = signal(true);
 
-  readonly iconUp   = '<svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>';
-  readonly iconDown = '<svg viewBox="0 0 24 24"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>';
-  readonly iconPlus = '<svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>';
+  readonly iconUp   = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>';
+  readonly iconDown = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>';
+  readonly iconPlus = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>';
 
   ngOnInit(): void {
-    let done = 0;
-    const checkDone = () => { if (++done === 2) this.loading.set(false); };
     this.salary.myEarnings().subscribe({
-      next: e => { this.earnings.set(e); checkDone(); },
-      error: () => checkDone()
-    });
-    this.salary.myTransactions().subscribe({
-      next: t => { this.transactions.set(t); checkDone(); },
-      error: () => checkDone()
+      next: e => {
+        this.earnings.set(e);
+        this.transactions.set(e?.transactions ?? []);
+        this.loading.set(false);
+      },
+      error: () => this.loading.set(false)
     });
   }
 
   badgeFor(type: string): string {
     return ({
-      'Salary': 'badge-primary',
-      'Bonus': 'badge-success',
-      'Deduction': 'badge-danger'
+      'Salary':       'badge-primary',
+      'Bonus':        'badge-success',
+      'Consultation': 'badge-info',
+      'Deduction':    'badge-danger'
     } as Record<string, string>)[type] || 'badge-neutral';
   }
 }

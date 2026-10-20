@@ -7,7 +7,8 @@ const create = async ({
     hospital_id = null,
     amount,
     payment_method,
-    payment_status = "Pending"
+    payment_status = "Pending",
+    paid_at = null
 }) => {
     let resolvedHospitalId = hospital_id;
     if (!resolvedHospitalId) {
@@ -20,9 +21,9 @@ const create = async ({
 
     const [result] = await pool.execute(
         `INSERT INTO payments
-            (appointment_id, patient_id, doctor_id, hospital_id, amount, payment_method, payment_status)
-         VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [appointment_id, patient_id, doctor_id, resolvedHospitalId, amount, payment_method, payment_status]
+            (appointment_id, patient_id, doctor_id, hospital_id, amount, payment_method, payment_status, paid_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        [appointment_id, patient_id, doctor_id, resolvedHospitalId, amount, payment_method, payment_status, paid_at]
     );
 
     return result.insertId;

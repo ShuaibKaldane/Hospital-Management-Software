@@ -16,7 +16,10 @@ const uploadReport = wrap(async (req, res) => {
     const data = await reportService.uploadReport(req.user.id, {
         appointment_id: Number(req.body.appointment_id),
         report_name: req.body.report_name || req.file.originalname,
-        file_path: req.file.path
+        // Store only the basename — the file lives in `uploads/` which is
+        // served statically by the API. Storing an absolute path would break
+        // portability and URL construction.
+        file_path: req.file.filename
     });
 
     return success(res, 201, "Report uploaded", data);

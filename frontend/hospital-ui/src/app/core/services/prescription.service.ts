@@ -20,6 +20,6 @@ export class PrescriptionService {
   }
 
   myPrescriptions(): Observable<Prescription[]> {
-    return this.api.get<Prescription[]>('/patient/prescriptions');
+    return this.api.get<Prescription[]>('/doctor/prescriptions');
   }
 }

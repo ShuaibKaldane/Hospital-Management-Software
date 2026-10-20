@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 require("dotenv").config();
 
 const errorHandler = require("./middleware/error.middleware");
@@ -25,6 +26,9 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
     res.send("Hospital API Running...");
 });
+
+// --- Static uploads (patient reports) ---
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // --- API routes ---
 app.use("/api",                   publicRoutes);

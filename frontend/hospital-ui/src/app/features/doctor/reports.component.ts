@@ -77,9 +77,10 @@ export class DoctorReportsComponent implements OnInit {
 
   /** Backend stores uploads on disk; expose a direct link to the static folder. */
   fileUrl(r: PatientReport): string {
-    // server.js serves /uploads via express.static in a real deployment;
-    // here we just link to the path the backend writes (relative to API host).
     const base = environment.apiBaseUrl.replace(/\/api$/, '');
-    return `${base}/${r.file_path.replace(/\\/g, '/')}`;
+    // Backend now stores only the basename (`req.file.filename`).
+    // Serve from `/uploads/` static folder.
+    const filename = r.file_path.split(/[\\/]/).pop() || '';
+    return `${base}/uploads/${filename}`;
   }
 }

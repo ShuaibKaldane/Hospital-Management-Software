@@ -5,9 +5,7 @@
 -- Uses INSERT IGNORE so it is safe to re-run on every startup.
 -- =========================================================
 
-USE hospital_management_system;
-
--- -----------------------------------------------------
+USE hospital_management_system;-- -----------------------------------------------------
 -- 1. SUPER ADMIN (login: admin@medicare.com / admin)
 -- Password hash for "admin" generated with bcrypt cost 10.
 -- -----------------------------------------------------
