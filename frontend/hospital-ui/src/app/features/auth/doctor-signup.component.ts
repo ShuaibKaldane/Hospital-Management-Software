@@ -39,9 +39,9 @@ import { DoctorCategory } from '../../core/models/doctor.model';
 
         <div class="form-group">
           <label class="form-label">Hospital</label>
-          <select class="form-control" formControlName="hospital_id">
+          <select class="form-control" #hospitalSel (change)="selectedHospitalId.set($any(hospitalSel).value)">
             <option value="">Select hospital</option>
-            <option *ngFor="let h of hospitals()" [value]="h.id">{{ h.hospitalName }}<span *ngIf="h.city"> · {{ h.city }}</span></option>
+            <option *ngFor="let h of hospitals()" [value]="h.id">{{ h.hospitalName }}{{ h.city ? ' · ' + h.city : '' }}</option>
           </select>
         </div>
 
@@ -118,12 +118,12 @@ export class DoctorSignupComponent implements OnInit {
   readonly loading = signal(false);
   readonly error   = signal<string | null>(null);
   readonly info    = signal<string | null>(null);
+  readonly selectedHospitalId = signal<string>('');
 
   categories: DoctorCategory[] = [];
-  hospitals = signal<HospitalOption[]>([]);
+  readonly hospitals = this.hospitalsSvc.hospitals;
 
   form: FormGroup = this.fb.group({
-    hospital_id:      ['', Validators.required],
     name:             ['', Validators.required],
     email:            ['', [Validators.required, Validators.email]],
     password:         ['', [Validators.required, Validators.minLength(6)]],
@@ -139,7 +139,8 @@ export class DoctorSignupComponent implements OnInit {
     this.docs.listCategories().subscribe({
       next: cs => this.categories = cs
     });
-    this.hospitals.set(this.hospitalsSvc.hospitals());
+    // Re-fetch in case the page was opened before the initial load finished.
+    this.hospitalsSvc.refresh();
   }
 
   submit(): void {
@@ -147,21 +148,26 @@ export class DoctorSignupComponent implements OnInit {
       this.form.markAllAsTouched();
       return;
     }
+
+    const hospitalId = Number(this.selectedHospitalId());
+    if (!Number.isFinite(hospitalId) || hospitalId <= 0) {
+      this.error.set('Please pick a hospital.');
+      return;
+    }
+
     this.loading.set(true);
     this.error.set(null);
     this.info.set(null);
 
     const v = this.form.value as any;
-    const payload = {
-      ...v,
-      hospital_id: Number(v.hospital_id)
-    };
+    const payload = { ...v, hospital_id: hospitalId };
 
     this.auth.doctorSignup(payload).subscribe({
       next: () => {
         this.loading.set(false);
         this.info.set('Application submitted! The hospital admin will review and approve your account. You will be able to sign in once approved.');
         this.form.reset();
+        this.selectedHospitalId.set('');
       },
       error: (err) => {
         this.loading.set(false);

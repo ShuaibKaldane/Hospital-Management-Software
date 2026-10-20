@@ -24,6 +24,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
         <a routerLink="/marketing/trial"    routerLinkActive="active" class="mkt-nav__link">Free trial</a>
         <a routerLink="/marketing/checkout" routerLinkActive="active" class="mkt-nav__link">Buy plan</a>
         <a routerLink="/register"            routerLinkActive="active" class="mkt-nav__link">Patient sign-up</a>
+        <a routerLink="/doctor/signup"       routerLinkActive="active" class="mkt-nav__link">Doctor registration</a>
       </nav>
 
       <div class="mkt-nav__actions">

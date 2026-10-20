@@ -11,4 +11,6 @@ router.post("/patient/login",      authController.patientLogin);
 router.post("/doctor/signup",      authController.doctorSignup);
 router.post("/patient/signup",     authController.patientSignup);
 
+router.get("/hospitals",           authController.listHospitals);
+
 module.exports = router;

@@ -1,4 +1,5 @@
 const authService = require("../services/auth.service");
+const hospitalModel = require("../models/hospital.model");
 
 const run = (handler) => async (req, res) => {
     try {
@@ -49,11 +50,29 @@ const patientSignup = run(async (req) => {
     };
 });
 
+/**
+ * Public list of hospitals for the doctor / patient signup dropdowns.
+ * No auth required — anyone can browse the tenant directory.
+ * Returns slim shape: { id, name, city, plan, trial }.
+ */
+const listHospitals = run(async () => {
+    const rows = await hospitalModel.findAll();
+    const data = rows.map(h => ({
+        id: h.id,
+        name: h.name,
+        city: h.city || null,
+        plan: h.plan,
+        trial: h.trial
+    }));
+    return { status: 200, success: true, data };
+});
+
 module.exports = {
     superAdminLogin,
     adminLogin,
     doctorLogin,
     patientLogin,
     doctorSignup,
-    patientSignup
+    patientSignup,
+    listHospitals
 };
