@@ -1,0 +1,176 @@
+<section class="checkout-page" aria-labelledby="checkout-title">
+  <div class="checkout-container">
+    <div class="checkout-topbar">
+      <a routerLink="/marketing/pricing" class="checkout-back">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
+        Back to plans
+      </a>
+      <span class="checkout-demo-badge">Demo checkout</span>
+    </div>
+
+    <header class="checkout-header">
+      <div>
+        <span class="checkout-eyebrow">YOUR HOSPITAL, CONNECTED</span>
+        <h1 id="checkout-title">Complete your purchase</h1>
+        <p>Add your hospital details to activate your {{ plan.name }} plan.<br class="checkout-desktop-break"> Your admin access will be ready as soon as you finish.</p>
+      </div>
+      <ol class="checkout-steps" aria-label="Setup progress">
+        <li class="is-complete"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6" /></svg></span>Plan selected</li>
+        <li class="is-current" aria-current="step"><span>2</span>Checkout</li>
+        <li><span>3</span>Activation</li>
+      </ol>
+    </header>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="checkout-layout" novalidate [attr.aria-busy]="submitting()">
+      <div class="checkout-form-panels">
+        <section class="checkout-panel" aria-labelledby="hospital-details-title">
+          <div class="checkout-panel-header">
+            <span class="checkout-section-number" aria-hidden="true">01</span>
+            <div>
+              <h2 id="hospital-details-title">Hospital details</h2>
+              <p>Let’s get to know your hospital and its administrator.</p>
+            </div>
+          </div>
+          <p class="checkout-required-note">Fields marked <span>*</span> are required.</p>
+
+          <div class="checkout-field">
+            <label for="hospital-name">Hospital name <span aria-hidden="true">*</span></label>
+            <input id="hospital-name" formControlName="hospitalName" autocomplete="organization" placeholder="e.g. Sunshine Multispeciality Hospital" required
+              [attr.aria-invalid]="!!fieldError('hospitalName')" [attr.aria-describedby]="fieldError('hospitalName') ? 'hospital-name-error' : null">
+            @if (fieldError('hospitalName'); as error) { <p id="hospital-name-error" class="checkout-field-error">{{ error }}</p> }
+          </div>
+
+          <div class="checkout-field-row">
+            <div class="checkout-field">
+              <label for="admin-name">Admin full name <span aria-hidden="true">*</span></label>
+              <input id="admin-name" formControlName="adminName" autocomplete="name" placeholder="Your full name" required
+                [attr.aria-invalid]="!!fieldError('adminName')" [attr.aria-describedby]="fieldError('adminName') ? 'admin-name-error' : null">
+              @if (fieldError('adminName'); as error) { <p id="admin-name-error" class="checkout-field-error">{{ error }}</p> }
+            </div>
+            <div class="checkout-field">
+              <label for="admin-email">Admin email <span aria-hidden="true">*</span></label>
+              <input id="admin-email" formControlName="adminEmail" type="email" autocomplete="email" placeholder="admin@yourhospital.com" required
+                [attr.aria-invalid]="!!fieldError('adminEmail')" [attr.aria-describedby]="fieldError('adminEmail') ? 'admin-email-error admin-email-hint' : 'admin-email-hint'">
+              @if (fieldError('adminEmail'); as error) { <p id="admin-email-error" class="checkout-field-error">{{ error }}</p> }
+              <p id="admin-email-hint" class="checkout-field-hint">You’ll use this email to sign in as admin.</p>
+            </div>
+          </div>
+
+          <div class="checkout-field-row">
+            <div class="checkout-field">
+              <label for="hospital-phone">Phone number <span aria-hidden="true">*</span></label>
+              <input id="hospital-phone" formControlName="phone" type="tel" autocomplete="tel" placeholder="+91 98765 43210" required
+                [attr.aria-invalid]="!!fieldError('phone')" [attr.aria-describedby]="fieldError('phone') ? 'hospital-phone-error' : null">
+              @if (fieldError('phone'); as error) { <p id="hospital-phone-error" class="checkout-field-error">{{ error }}</p> }
+            </div>
+            <div class="checkout-field">
+              <label for="hospital-city">City <span aria-hidden="true">*</span></label>
+              <input id="hospital-city" formControlName="city" autocomplete="address-level2" placeholder="e.g. Bengaluru" required
+                [attr.aria-invalid]="!!fieldError('city')" [attr.aria-describedby]="fieldError('city') ? 'hospital-city-error' : null">
+              @if (fieldError('city'); as error) { <p id="hospital-city-error" class="checkout-field-error">{{ error }}</p> }
+            </div>
+          </div>
+
+          <div class="checkout-field checkout-field--last">
+            <label for="hospital-address">Full address <small>Optional</small></label>
+            <textarea id="hospital-address" formControlName="address" autocomplete="street-address" rows="2" placeholder="Street, area, state and PIN code"></textarea>
+          </div>
+        </section>
+
+        <section class="checkout-panel" aria-labelledby="payment-title">
+          <div class="checkout-panel-header">
+            <span class="checkout-section-number" aria-hidden="true">02</span>
+            <div>
+              <h2 id="payment-title">Payment details</h2>
+              <p>A preview of your checkout experience.</p>
+            </div>
+            <svg class="checkout-payment-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3" /><path d="M2 9h20M6 15h3" /></svg>
+          </div>
+          <div class="checkout-demo-note" id="payment-demo-note">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 11v5M12 8h.01" /></svg>
+            <p><strong>No real payment is taken.</strong> These fields are optional. Use sample details or leave them blank; card information is never saved.</p>
+          </div>
+          <div class="checkout-field-row">
+            <div class="checkout-field">
+              <label for="card-number">Card number</label>
+              <input id="card-number" formControlName="cardNumber" placeholder="4242 4242 4242 4242" inputmode="numeric" autocomplete="off" maxlength="19" aria-describedby="payment-demo-note">
+            </div>
+            <div class="checkout-field">
+              <label for="card-name">Name on card</label>
+              <input id="card-name" formControlName="cardName" placeholder="As shown on card" autocomplete="off" aria-describedby="payment-demo-note">
+            </div>
+          </div>
+          <div class="checkout-field-row">
+            <div class="checkout-field checkout-field--last">
+              <label for="card-expiry">Expiry date</label>
+              <input id="card-expiry" formControlName="cardExpiry" placeholder="MM/YY" inputmode="numeric" autocomplete="off" maxlength="5" aria-describedby="payment-demo-note">
+            </div>
+            <div class="checkout-field checkout-field--last">
+              <label for="card-cvv">CVV</label>
+              <input id="card-cvv" formControlName="cardCvv" type="password" placeholder="123" inputmode="numeric" autocomplete="off" maxlength="4" aria-describedby="payment-demo-note">
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="checkout-sidebar" aria-labelledby="order-summary-title">
+        <section class="checkout-summary">
+          <div class="checkout-summary-heading">
+            <h2 id="order-summary-title">Order summary</h2>
+            <a routerLink="/marketing/pricing" class="checkout-link">Change plan</a>
+          </div>
+          <div class="checkout-selected-plan">
+            <span class="checkout-plan-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 3h4v7h7v4h-7v7h-4v-7H3v-4h7z" /></svg></span>
+            <div><h3>{{ plan.name }}</h3><p>{{ plan.tagline }}</p></div>
+          </div>
+          <ul class="checkout-features">
+            @for (feature of includedFeatures; track feature) {
+              <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6" /></svg>{{ feature }}</li>
+            }
+          </ul>
+
+          <fieldset class="checkout-billing" [disabled]="submitting()">
+            <legend>Billing cycle</legend>
+            <div class="checkout-cycle-options">
+              <label class="checkout-cycle-option" [class.is-selected]="cycle() === 'monthly'">
+                <input type="radio" formControlName="cycle" name="cycle" value="monthly">
+                <span>Monthly</span><small>Pay as you go</small>
+              </label>
+              <label class="checkout-cycle-option" [class.is-selected]="cycle() === 'annual'">
+                <input type="radio" formControlName="cycle" name="cycle" value="annual">
+                <span>Annual</span><small>Save {{ annualSavingsPercent }}%</small>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="checkout-totals" aria-live="polite" aria-atomic="true">
+            <div class="checkout-price-row"><span>{{ cycle() === 'annual' ? 'Annual subscription' : 'Monthly subscription' }}</span><strong>{{ formatINR(subtotal()) }}</strong></div>
+            <div class="checkout-price-row"><span>GST ({{ (gstRate * 100).toFixed(0) }}%)</span><strong>{{ formatINR(gstAmt()) }}</strong></div>
+            @if (cycle() === 'annual') {
+              <p class="checkout-savings">You save {{ formatINR((plan.monthly - monthly()) * 12) }} a year before GST.</p>
+            }
+            <div class="checkout-total"><span>Total today<small>Including GST</small></span><strong>{{ formatINR(total()) }}</strong></div>
+            <p class="checkout-billing-note">{{ cycle() === 'annual' ? 'Billed annually · ' + formatINR(monthly()) + '/month before GST.' : 'Billed monthly. Cancel future renewals anytime.' }}</p>
+          </div>
+
+          @if (serverError()) {
+            <div class="checkout-server-error" role="alert">{{ serverError() }}</div>
+          }
+          <button type="submit" class="checkout-submit" [disabled]="submitting()">
+            @if (submitting()) {
+              <span class="checkout-spinner" aria-hidden="true"></span><span>Activating your hospital…</span>
+            } @else {
+              <span>Complete purchase</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg>
+            }
+          </button>
+          <p class="checkout-no-charge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4v5c0 5-8 9-8 9s-8-4-8-9V7z" /><path d="m8 12 3 3 5-5" /></svg>Demo mode · You won’t be charged</p>
+          <p class="checkout-terms">By continuing, you agree to the subscription terms for your selected plan.</p>
+        </section>
+        <div class="checkout-trial-prompt">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
+          <div><strong>Prefer to try it first?</strong><p><a routerLink="/marketing/trial" class="checkout-link">Start a 7-day free trial</a><br>No card details needed.</p></div>
+        </div>
+      </aside>
+    </form>
+  </div>
+</section>

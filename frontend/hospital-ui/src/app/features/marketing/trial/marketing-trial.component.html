@@ -1,0 +1,112 @@
+<section class="trial-page" aria-labelledby="trial-title">
+  <div class="trial-layout">
+    <div class="trial-intro">
+      <span class="trial-eyebrow"><span></span> YOUR 7-DAY FREE TRIAL</span>
+      <h1 id="trial-title">Better hospital management.<br><span>Starts here.</span></h1>
+      <p class="trial-lead">Give your hospital a fresh start with MediCare+. Set up your workspace and explore it at your own pace.</p>
+
+      <ul class="trial-benefits" aria-label="Included in your trial">
+        <li>
+          <span class="trial-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 4v16M9 9h11M13 13h3M13 16h3"/></svg>
+          </span>
+          <div><h2>Full admin access</h2><p>Explore your hospital workspace with full admin access for 7 days.</p></div>
+        </li>
+        <li>
+          <span class="trial-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="m13 2-9 12h7l-1 8 10-12h-7l1-8Z"/></svg>
+          </span>
+          <div><h2>Ready when you are</h2><p>Your admin login credentials are generated as soon as you activate.</p></div>
+        </li>
+        <li>
+          <span class="trial-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M20 8v6M17 11h6"/><circle cx="9" cy="7" r="4"/></svg>
+          </span>
+          <div><h2>Connect with your patients</h2><p>Your hospital becomes available for patients to select during sign-up.</p></div>
+        </li>
+      </ul>
+
+      <div class="trial-assurance">
+        <span class="trial-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="m12 3 8 4v5c0 5-8 9-8 9s-8-4-8-9V7l8-4Z"/><path d="m8 12 3 3 5-6"/></svg>
+        </span>
+        <div><h2>A trial on your terms</h2><p>No credit card. No automatic charges. Choose a paid plan when you’re ready.</p></div>
+      </div>
+      <p class="trial-signin">Already have an account? <a routerLink="/login">Sign in <span aria-hidden="true">&rarr;</span></a></p>
+    </div>
+
+    <div class="trial-registration">
+      <form #trialForm [formGroup]="form" (ngSubmit)="submit()" class="trial-card" [attr.aria-busy]="submitting()" aria-labelledby="trial-form-title" novalidate>
+        <div class="trial-card-header">
+          <span class="trial-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M10 21v-4h4v4M12 6v6M9 9h6"/></svg>
+          </span>
+          <span class="trial-free-badge">7 days, free</span>
+        </div>
+        <h2 id="trial-form-title">Create your hospital workspace</h2>
+        <p class="trial-card-description">A few details and you’re ready to get started.</p>
+
+        <fieldset [disabled]="submitting()">
+          <legend>Hospital &amp; administrator details</legend>
+          <p class="trial-required-note">Fields marked <span aria-hidden="true">*</span> are required.</p>
+          <div class="trial-field">
+            <label for="trial-hospital">Hospital name <span aria-hidden="true">*</span></label>
+            <input id="trial-hospital" formControlName="hospitalName" autocomplete="organization" placeholder="e.g. Sunshine Multispeciality Hospital" required [attr.aria-invalid]="!!fieldError('hospitalName')" [attr.aria-describedby]="fieldError('hospitalName') ? 'trial-hospital-error' : null">
+            @if (fieldError('hospitalName'); as error) { <p id="trial-hospital-error" class="trial-field-error">{{ error }}</p> }
+          </div>
+
+          <div class="trial-field-row">
+            <div class="trial-field">
+              <label for="trial-admin">Administrator name <span aria-hidden="true">*</span></label>
+              <input id="trial-admin" formControlName="adminName" autocomplete="name" placeholder="Your full name" required [attr.aria-invalid]="!!fieldError('adminName')" [attr.aria-describedby]="fieldError('adminName') ? 'trial-admin-error' : null">
+              @if (fieldError('adminName'); as error) { <p id="trial-admin-error" class="trial-field-error">{{ error }}</p> }
+            </div>
+            <div class="trial-field">
+              <label for="trial-email">Work email <span aria-hidden="true">*</span></label>
+              <input id="trial-email" formControlName="adminEmail" type="email" autocomplete="email" placeholder="admin@hospital.com" required [attr.aria-invalid]="!!fieldError('adminEmail')" [attr.aria-describedby]="fieldError('adminEmail') ? 'trial-email-hint trial-email-error' : 'trial-email-hint'">
+              <p id="trial-email-hint" class="trial-field-hint">Your email will be your admin login.</p>
+              @if (fieldError('adminEmail'); as error) { <p id="trial-email-error" class="trial-field-error">{{ error }}</p> }
+            </div>
+          </div>
+
+          <div class="trial-field-row">
+            <div class="trial-field">
+              <label for="trial-phone">Phone number <span aria-hidden="true">*</span></label>
+              <input id="trial-phone" formControlName="phone" type="tel" autocomplete="tel" placeholder="+91 98765 43210" required [attr.aria-invalid]="!!fieldError('phone')" [attr.aria-describedby]="fieldError('phone') ? 'trial-phone-error' : null">
+              @if (fieldError('phone'); as error) { <p id="trial-phone-error" class="trial-field-error">{{ error }}</p> }
+            </div>
+            <div class="trial-field">
+              <label for="trial-city">City <span aria-hidden="true">*</span></label>
+              <input id="trial-city" formControlName="city" autocomplete="address-level2" placeholder="e.g. Bengaluru" required [attr.aria-invalid]="!!fieldError('city')" [attr.aria-describedby]="fieldError('city') ? 'trial-city-error' : null">
+              @if (fieldError('city'); as error) { <p id="trial-city-error" class="trial-field-error">{{ error }}</p> }
+            </div>
+          </div>
+
+          <div class="trial-field">
+            <label for="trial-address">Hospital address <span class="trial-optional">Optional</span></label>
+            <textarea id="trial-address" formControlName="address" autocomplete="street-address" rows="2" placeholder="Street, area, state and PIN code"></textarea>
+          </div>
+        </fieldset>
+
+        @if (serverError()) {
+          <div class="trial-server-error" role="alert"><strong>We couldn’t activate your trial.</strong> {{ serverError() }}</div>
+        }
+
+        <button type="submit" class="trial-submit" [disabled]="submitting()">
+          @if (submitting()) {
+            <span class="trial-spinner" aria-hidden="true"></span><span>Activating your trial...</span>
+          } @else {
+            <span>Start my free trial</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+          }
+        </button>
+        <p class="trial-no-card">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h3"/></svg>
+          No credit card required
+        </p>
+        <p class="trial-terms">By starting a trial, you agree to our terms. You can upgrade to a paid plan anytime from your admin dashboard.</p>
+      </form>
+      <p class="trial-plan-link">Ready for a paid plan? <a routerLink="/marketing/pricing">Compare plans <span aria-hidden="true">&rarr;</span></a></p>
+    </div>
+  </div>
+</section>
