@@ -1,0 +1,116 @@
+<section class="pricing-section" aria-labelledby="pricing-title">
+  <div class="pricing-container">
+    <header class="pricing-hero">
+      <span class="pricing-eyebrow"><span aria-hidden="true"></span> SIMPLE, TRANSPARENT PRICING</span>
+      <h1 id="pricing-title">Better care starts<br />with <span>the right plan.</span></h1>
+      <p>From your first patient to your next location, find the right fit for your team.<br class="pricing-desktop-break" /> Clear pricing in Indian rupees. Room to grow.</p>
+      <ul class="pricing-assurances" aria-label="Subscription benefits">
+        <li><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6" /></svg>7-day free trial</li>
+        <li><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6" /></svg>No card required for trial</li>
+        <li><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6" /></svg>Change plans anytime</li>
+      </ul>
+    </header>
+
+    <div class="pricing-grid">
+      <article class="pricing-card pricing-card--trial" aria-labelledby="trial-title">
+        <div class="pricing-card__label"><span class="pricing-chip">7 DAYS, ON US</span></div>
+        <h2 id="trial-title" class="pricing-card__name">Free Trial</h2>
+        <p class="pricing-card__description">Get to know MediCare+ before you commit.</p>
+        <div class="pricing-card__price"><span class="pricing-card__currency">&#8377;</span><span class="pricing-card__amount">0</span><span class="pricing-card__period">/ 7 days</span></div>
+        <p class="pricing-card__billing">No payment. No credit card.</p>
+        <a routerLink="/marketing/trial" class="pricing-button pricing-button--secondary">Start free trial <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></a>
+        <div class="pricing-card__features">
+          <h3>Your trial includes</h3>
+          <ul class="pricing-feature-list">
+            @for (feature of trialFeatures; track feature.text) {
+              <li [class.is-unavailable]="!feature.on">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  @if (feature.on) { <path d="m5 12 4 4L19 6" /> } @else { <path d="M6 12h12" /> }
+                </svg>
+                <span>@if (!feature.on) { <span class="pricing-sr-only">Not included: </span> }{{ feature.text }}</span>
+              </li>
+            }
+          </ul>
+        </div>
+      </article>
+
+      @for (id of order; track id) {
+        @let plan = plans[id];
+        <article class="pricing-card" [class.pricing-card--popular]="plan.popular" [attr.aria-labelledby]="'plan-' + id">
+          <div class="pricing-card__label">
+            @if (plan.popular) {
+              <span class="pricing-chip pricing-chip--popular"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9Z" /></svg>MOST POPULAR</span>
+            } @else {
+              <span class="pricing-card__category">{{ id === 'basic' ? 'FOR SMALL TEAMS' : 'FOR LARGE NETWORKS' }}</span>
+            }
+          </div>
+          <h2 [id]="'plan-' + id" class="pricing-card__name">{{ plan.name }}</h2>
+          <p class="pricing-card__description">{{ plan.tagline }}</p>
+          <div class="pricing-card__price"><span class="pricing-card__currency">&#8377;</span><span class="pricing-card__amount">{{ plan.monthly | number:'1.0-0':'en-IN' }}</span><span class="pricing-card__period">/ month</span></div>
+          <p class="pricing-card__billing">+ {{ gstPercent }}% GST, billed monthly</p>
+          <a routerLink="/marketing/checkout" [queryParams]="{plan: plan.id}" class="pricing-button" [class.pricing-button--primary]="plan.popular" [class.pricing-button--secondary]="!plan.popular">
+            Choose {{ plan.name }}
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" /></svg>
+          </a>
+          <div class="pricing-card__features">
+            <h3>What's included</h3>
+            <ul class="pricing-feature-list">
+              @for (feature of plan.features; track feature.text) {
+                <li [class.is-unavailable]="!feature.on">
+                  <svg aria-hidden="true" viewBox="0 0 24 24">
+                    @if (feature.on) { <path d="m5 12 4 4L19 6" /> } @else { <path d="M6 12h12" /> }
+                  </svg>
+                  <span>@if (!feature.on) { <span class="pricing-sr-only">Not included: </span> }{{ feature.text }}</span>
+                </li>
+              }
+            </ul>
+          </div>
+        </article>
+      }
+    </div>
+
+    <p class="pricing-tax-note">All paid plans are billed in INR. GST is added at checkout.</p>
+
+    <div class="pricing-foundation">
+      <div class="pricing-foundation__intro"><span class="pricing-kicker">THE ESSENTIALS, COVERED</span><h2>Built into every paid plan.</h2></div>
+      <ul>
+        <li><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2m20 0v-2a4 4 0 0 0-3-3.9" /><circle cx="9" cy="7" r="4" /><path d="M16 3.1a4 4 0 0 1 0 7.8" /></svg>Doctor &amp; staff management</li>
+        <li><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M16 3v4M8 3v4M3 11h18m-13 5 2 2 4-4" /></svg>Appointment booking</li>
+        <li><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Zm0 0v6h6M8 13h8m-8 4h5" /></svg>Digital prescriptions</li>
+        <li><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 3v18h18M7 14v3m5-8v8m5-12v12" /></svg>Dashboard &amp; basic reports</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="pricing-faq-section" aria-labelledby="faq-title">
+  <div class="pricing-container pricing-faq-layout">
+    <header class="pricing-faq-intro">
+      <span class="pricing-kicker">A LITTLE MORE CLARITY</span>
+      <h2 id="faq-title">Good questions.<br />Straight answers.</h2>
+      <p>Everything you need to know before choosing a plan for your hospital.</p>
+      <div class="pricing-help">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8Z" /></svg>
+        <div><h3>Need a hand deciding?</h3><p>We're happy to help you find the right fit.</p><a href="mailto:hello@medicare-plus.in" class="pricing-contact">Talk to our team <span aria-hidden="true">&rarr;</span></a></div>
+      </div>
+    </header>
+
+    <div class="pricing-faq">
+      <details name="pricing-faq"><summary>How does the free trial work?</summary><div class="pricing-faq__answer">Try MediCare+ for 7 days without a credit card or payment. You'll get admin access for up to 5 doctors and 50 patients. When you're ready to continue, choose the paid plan that fits your team. <a routerLink="/marketing/trial" class="pricing-contact">Start your free trial.</a></div></details>
+      <details name="pricing-faq"><summary>How does billing work?</summary><div class="pricing-faq__answer">Plans are billed monthly in Indian rupees, with {{ gstPercent }}% GST added at checkout. We accept UPI, net banking, debit and credit cards, and bank transfer. GST invoices are generated each month and emailed to your registered address.</div></details>
+      <details name="pricing-faq"><summary>Can I upgrade or downgrade my plan?</summary><div class="pricing-faq__answer">Yes. You can upgrade or downgrade at any time. We prorate the difference when you change plans, so you only pay for what you've used. There are no lock-in contracts or penalties.</div></details>
+      <details name="pricing-faq"><summary>What happens after I purchase a plan?</summary><div class="pricing-faq__answer">You'll receive a downloadable file with your hospital's admin sign-in details. Use those credentials on the login page to access your hospital workspace and start setting up your team.</div></details>
+      <details name="pricing-faq"><summary>Can patients find my hospital right away?</summary><div class="pricing-faq__answer">Yes. Once your hospital is activated, it appears in the patient registration screen. Patients can select your hospital and start booking appointments the same day.</div></details>
+      <details name="pricing-faq"><summary>How is my hospital's patient data protected?</summary><div class="pricing-faq__answer">Patient data is encrypted in transit and at rest. Nightly backups and point-in-time recovery help protect your records. Your hospital's patient data is never shared with third parties.</div></details>
+    </div>
+  </div>
+</section>
+
+<section class="pricing-close-section" aria-labelledby="trial-cta-title">
+  <div class="pricing-container">
+    <div class="pricing-close">
+      <div><span class="pricing-kicker">YOUR NEXT CHAPTER STARTS HERE</span><h2 id="trial-cta-title">More time for what matters.</h2><p>Give your team a simpler way to work. Try MediCare+ free for 7 days.</p></div>
+      <div class="pricing-close__action"><a routerLink="/marketing/trial" class="pricing-button pricing-button--primary">Start your free trial <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></a><span>No credit card required</span></div>
+    </div>
+  </div>
+</section>

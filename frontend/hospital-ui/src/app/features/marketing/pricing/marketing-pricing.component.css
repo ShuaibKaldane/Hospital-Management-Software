@@ -1,0 +1,37 @@
+:host {
+  --pricing-bg: #f8fafc;
+  --pricing-surface: #fff;
+  --pricing-soft: #f1f5f9;
+  --pricing-text: #0f172a;
+  --pricing-muted: #526175;
+  --pricing-border: #e0e7ef;
+  --pricing-accent: #1d4ed8;
+  --pricing-accent-hover: #1e40af;
+  --pricing-tint: #eff6ff;
+  --pricing-accent-border: #bfdbfe;
+  --pricing-on-accent: #fff;
+  --pricing-check: #047857;
+  --pricing-shadow: 0 8px 24px -12px rgb(15 23 42 / 12%);
+  display: block;
+  background: var(--pricing-bg);
+  color: var(--pricing-text);
+  color-scheme: light;
+}
+
+:host-context([data-theme='dark']) {
+  --pricing-bg: #0b1220;
+  --pricing-surface: #111c2e;
+  --pricing-soft: #162338;
+  --pricing-text: #edf2fa;
+  --pricing-muted: #a4b2c6;
+  --pricing-border: #29374b;
+  --pricing-accent: #67e8f9;
+  --pricing-accent-hover: #a5f3fc;
+  --pricing-tint: #102b3a;
+  --pricing-accent-border: #285a6a;
+  --pricing-on-accent: #082334;
+  --pricing-check: #6ee7b7;
+  --pricing-shadow: 0 8px 24px -12px rgb(0 0 0 / 32%);
+  color-scheme: dark;
+}
+
