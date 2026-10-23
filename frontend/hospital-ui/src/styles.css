@@ -418,9 +418,27 @@
 [data-theme="dark"] .mkt-eyebrow .dot { background: var(--color-success); }
 [data-theme="dark"] .mkt-hero__title .accent { color: var(--color-primary) !important; }
 
-/* Hero illustration — keep the embedded SVG readable on dark surface
-   via a soft outer frame + dim so the white panels don't shout. */
+/* Hero illustration palette. SVG fallbacks preserve the light theme. */
 [data-theme="dark"] .mkt-hero__art {
+  --mkt-art-canvas: var(--color-bg);
+  --mkt-art-surface: var(--color-surface);
+  --mkt-art-chrome: var(--color-surface-alt);
+  --mkt-art-text: var(--color-text);
+  --mkt-art-muted: var(--color-text-muted);
+  --mkt-art-subtle: var(--color-text-muted);
+  --mkt-art-border: var(--color-border-strong);
+  --mkt-art-outline: var(--color-text-subtle);
+  --mkt-art-grid: var(--color-border);
+  --mkt-art-blue: var(--color-info);
+  --mkt-art-blue-strong: var(--color-info);
+  --mkt-art-blue-soft: var(--color-info-soft);
+  --mkt-art-blue-tint: var(--color-primary-light);
+  --mkt-art-sky: var(--color-primary);
+  --mkt-art-sky-soft: #075985;
+  --mkt-art-success: var(--color-success);
+  --mkt-art-success-soft: var(--color-success-soft);
+  --mkt-art-success-strong: var(--color-success);
+
   position: relative;
   border-radius: 18px;
   background: linear-gradient(135deg, #0F1A2E 0%, #1B2A47 100%);

@@ -85,16 +85,16 @@ interface UseCase {
               <stop offset="100%" stop-color="#1D4ED8"/>
             </linearGradient>
             <linearGradient id="brand-soft" x1="0" x2="0" y1="0" y2="1">
-              <stop offset="0%" stop-color="#DBEAFE"/>
-              <stop offset="100%" stop-color="#EFF6FF"/>
+              <stop offset="0%" stop-color="var(--mkt-art-blue-soft, #DBEAFE)"/>
+              <stop offset="100%" stop-color="var(--mkt-art-blue-tint, #EFF6FF)"/>
             </linearGradient>
             <linearGradient id="lineFill" x1="0" x2="0" y1="0" y2="1">
-              <stop offset="0%" stop-color="#3B82F6" stop-opacity="0.35"/>
-              <stop offset="100%" stop-color="#3B82F6" stop-opacity="0"/>
+              <stop offset="0%" stop-color="var(--mkt-art-blue, #3B82F6)" stop-opacity="0.35"/>
+              <stop offset="100%" stop-color="var(--mkt-art-blue, #3B82F6)" stop-opacity="0"/>
             </linearGradient>
             <linearGradient id="skyFill" x1="0" x2="0" y1="0" y2="1">
-              <stop offset="0%" stop-color="#0EA5E9" stop-opacity="0.25"/>
-              <stop offset="100%" stop-color="#0EA5E9" stop-opacity="0"/>
+              <stop offset="0%" stop-color="var(--mkt-art-sky, #0EA5E9)" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="var(--mkt-art-sky, #0EA5E9)" stop-opacity="0"/>
             </linearGradient>
             <filter id="card" x="-30%" y="-30%" width="160%" height="180%">
               <feDropShadow dx="0" dy="14" stdDeviation="20" flood-color="#0F172A" flood-opacity="0.16"/>
@@ -105,70 +105,70 @@ interface UseCase {
           </defs>
 
           <!-- Page canvas -->
-          <rect width="600" height="480" fill="#FAFBFC"/>
+          <rect width="600" height="480" fill="var(--mkt-art-canvas, #FAFBFC)"/>
 
           <!-- ===================== Main dashboard panel ===================== -->
           <g filter="url(#card)">
-            <rect x="36" y="60" width="470" height="370" rx="12" fill="#FFFFFF"/>
+            <rect x="36" y="60" width="470" height="370" rx="12" fill="var(--mkt-art-surface, #FFFFFF)"/>
 
             <!-- Browser chrome -->
-            <rect x="36" y="60" width="470" height="34" fill="#F8FAFC" rx="12"/>
-            <rect x="36" y="78" width="470" height="16" fill="#F8FAFC"/>
+            <rect x="36" y="60" width="470" height="34" fill="var(--mkt-art-chrome, #F8FAFC)" rx="12"/>
+            <rect x="36" y="78" width="470" height="16" fill="var(--mkt-art-chrome, #F8FAFC)"/>
             <circle cx="54" cy="77" r="4" fill="#FF5F57"/>
             <circle cx="68" cy="77" r="4" fill="#FEBC2E"/>
             <circle cx="82" cy="77" r="4" fill="#28C840"/>
-            <rect x="124" y="68" width="290" height="20" rx="10" fill="#FFFFFF"/>
-            <text x="142" y="82" font-family="Inter, sans-serif" font-size="10.5" fill="#64748B">app.medicare-plus.in/admin/dashboard</text>
+            <rect x="124" y="68" width="290" height="20" rx="10" fill="var(--mkt-art-surface, #FFFFFF)"/>
+            <text x="142" y="82" font-family="Inter, sans-serif" font-size="10.5" fill="var(--mkt-art-muted, #64748B)">app.medicare-plus.in/admin/dashboard</text>
 
             <!-- Sidebar -->
-            <rect x="36" y="94" width="112" height="336" fill="#FFFFFF"/>
-            <rect x="148" y="94" width="1" height="336" fill="#E5EAF1"/>
+            <rect x="36" y="94" width="112" height="336" fill="var(--mkt-art-surface, #FFFFFF)"/>
+            <rect x="148" y="94" width="1" height="336" fill="var(--mkt-art-border, #E5EAF1)"/>
 
             <!-- Brand inside sidebar -->
             <g transform="translate(54, 110)">
               <rect width="22" height="22" rx="6" fill="url(#brand)"/>
               <path d="M7 11 h8 M11 7 v8" stroke="white" stroke-width="2" stroke-linecap="round"/>
-              <text x="30" y="11" font-family="Inter, sans-serif" font-size="12" font-weight="700" fill="#0B1220">MediCare+</text>
-              <text x="30" y="22" font-family="Inter, sans-serif" font-size="9" fill="#94A3B8">Admin</text>
+              <text x="30" y="11" font-family="Inter, sans-serif" font-size="12" font-weight="700" fill="var(--mkt-art-text, #0B1220)">MediCare+</text>
+              <text x="30" y="22" font-family="Inter, sans-serif" font-size="9" fill="var(--mkt-art-subtle, #94A3B8)">Admin</text>
             </g>
 
             <!-- Active nav item -->
             <g transform="translate(46, 156)">
-              <rect width="92" height="30" rx="8" fill="#EFF6FF"/>
+              <rect width="92" height="30" rx="8" fill="var(--mkt-art-blue-tint, #EFF6FF)"/>
               <rect x="8" y="8" width="14" height="14" rx="3" fill="url(#brand)"/>
               <rect x="13" y="11" width="4" height="2" fill="#FFFFFF"/>
               <rect x="14" y="10" width="2" height="4" fill="#FFFFFF"/>
-              <text x="30" y="19" font-family="Inter, sans-serif" font-size="10.5" font-weight="600" fill="#1D4ED8">Dashboard</text>
+              <text x="30" y="19" font-family="Inter, sans-serif" font-size="10.5" font-weight="600" fill="var(--mkt-art-blue-strong, #1D4ED8)">Dashboard</text>
             </g>
 
             <!-- Other nav items -->
-            <g font-family="Inter, sans-serif" font-size="10.5" fill="#64748B">
+            <g font-family="Inter, sans-serif" font-size="10.5" fill="var(--mkt-art-muted, #64748B)">
               <g transform="translate(46, 196)">
-                <rect x="8" y="8" width="14" height="14" rx="3" fill="none" stroke="#CBD5E1" stroke-width="1.4"/>
+                <rect x="8" y="8" width="14" height="14" rx="3" fill="none" stroke="var(--mkt-art-outline, #CBD5E1)" stroke-width="1.4"/>
                 <text x="30" y="19">Doctors</text>
               </g>
               <g transform="translate(46, 226)">
-                <rect x="8" y="8" width="14" height="14" rx="3" fill="none" stroke="#CBD5E1" stroke-width="1.4"/>
+                <rect x="8" y="8" width="14" height="14" rx="3" fill="none" stroke="var(--mkt-art-outline, #CBD5E1)" stroke-width="1.4"/>
                 <text x="30" y="19">Patients</text>
               </g>
               <g transform="translate(46, 256)">
-                <rect x="8" y="8" width="14" height="14" rx="3" fill="none" stroke="#CBD5E1" stroke-width="1.4"/>
+                <rect x="8" y="8" width="14" height="14" rx="3" fill="none" stroke="var(--mkt-art-outline, #CBD5E1)" stroke-width="1.4"/>
                 <text x="30" y="19">Appointments</text>
               </g>
               <g transform="translate(46, 286)">
-                <rect x="8" y="8" width="14" height="14" rx="3" fill="none" stroke="#CBD5E1" stroke-width="1.4"/>
+                <rect x="8" y="8" width="14" height="14" rx="3" fill="none" stroke="var(--mkt-art-outline, #CBD5E1)" stroke-width="1.4"/>
                 <text x="30" y="19">Reports</text>
               </g>
               <g transform="translate(46, 316)">
-                <rect x="8" y="8" width="14" height="14" rx="3" fill="none" stroke="#CBD5E1" stroke-width="1.4"/>
+                <rect x="8" y="8" width="14" height="14" rx="3" fill="none" stroke="var(--mkt-art-outline, #CBD5E1)" stroke-width="1.4"/>
                 <text x="30" y="19">Settings</text>
               </g>
             </g>
 
             <!-- Main content -->
             <!-- Page title -->
-            <text x="166" y="116" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#0B1220">Good morning, Dr. Ramesh 👋</text>
-            <text x="166" y="133" font-family="Inter, sans-serif" font-size="10" fill="#64748B">Here's what's happening at your hospital today.</text>
+            <text x="166" y="116" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="var(--mkt-art-text, #0B1220)">Good morning, Dr. Ramesh 👋</text>
+            <text x="166" y="133" font-family="Inter, sans-serif" font-size="10" fill="var(--mkt-art-muted, #64748B)">Here's what's happening at your hospital today.</text>
 
             <!-- Avatar (top right) -->
             <circle cx="478" cy="118" r="14" fill="url(#brand)"/>
@@ -176,45 +176,45 @@ interface UseCase {
 
             <!-- 3 stat cards -->
             <g transform="translate(166, 148)">
-              <rect width="106" height="72" rx="8" fill="#FFFFFF" stroke="#E5EAF1"/>
-              <text x="12" y="22" font-family="Inter, sans-serif" font-size="10" fill="#64748B">Patients</text>
-              <text x="12" y="48" font-family="Inter, sans-serif" font-size="20" font-weight="700" fill="#0B1220">128</text>
-              <text x="56" y="48" font-family="Inter, sans-serif" font-size="10" font-weight="600" fill="#059669">↑ 12%</text>
-              <polyline points="12,64 28,58 44,60 60,52 76,46 92,40" fill="none" stroke="#3B82F6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect width="106" height="72" rx="8" fill="var(--mkt-art-surface, #FFFFFF)" stroke="var(--mkt-art-border, #E5EAF1)"/>
+              <text x="12" y="22" font-family="Inter, sans-serif" font-size="10" fill="var(--mkt-art-muted, #64748B)">Patients</text>
+              <text x="12" y="48" font-family="Inter, sans-serif" font-size="20" font-weight="700" fill="var(--mkt-art-text, #0B1220)">128</text>
+              <text x="56" y="48" font-family="Inter, sans-serif" font-size="10" font-weight="600" fill="var(--mkt-art-success, #059669)">↑ 12%</text>
+              <polyline points="12,64 28,58 44,60 60,52 76,46 92,40" fill="none" stroke="var(--mkt-art-blue, #3B82F6)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
             </g>
 
             <g transform="translate(282, 148)">
-              <rect width="106" height="72" rx="8" fill="#FFFFFF" stroke="#E5EAF1"/>
-              <text x="12" y="22" font-family="Inter, sans-serif" font-size="10" fill="#64748B">Appointments</text>
-              <text x="12" y="48" font-family="Inter, sans-serif" font-size="20" font-weight="700" fill="#0B1220">86</text>
-              <text x="46" y="48" font-family="Inter, sans-serif" font-size="10" font-weight="600" fill="#059669">↑ 5%</text>
-              <polyline points="12,64 28,60 44,55 60,52 76,55 92,48" fill="none" stroke="#0EA5E9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect width="106" height="72" rx="8" fill="var(--mkt-art-surface, #FFFFFF)" stroke="var(--mkt-art-border, #E5EAF1)"/>
+              <text x="12" y="22" font-family="Inter, sans-serif" font-size="10" fill="var(--mkt-art-muted, #64748B)">Appointments</text>
+              <text x="12" y="48" font-family="Inter, sans-serif" font-size="20" font-weight="700" fill="var(--mkt-art-text, #0B1220)">86</text>
+              <text x="46" y="48" font-family="Inter, sans-serif" font-size="10" font-weight="600" fill="var(--mkt-art-success, #059669)">↑ 5%</text>
+              <polyline points="12,64 28,60 44,55 60,52 76,55 92,48" fill="none" stroke="var(--mkt-art-sky, #0EA5E9)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
             </g>
 
             <g transform="translate(398, 148)">
-              <rect width="92" height="72" rx="8" fill="#FFFFFF" stroke="#E5EAF1"/>
-              <text x="12" y="22" font-family="Inter, sans-serif" font-size="10" fill="#64748B">Earnings</text>
-              <text x="12" y="48" font-family="Inter, sans-serif" font-size="18" font-weight="700" fill="#0B1220">₹12.4L</text>
-              <text x="64" y="48" font-family="Inter, sans-serif" font-size="10" font-weight="600" fill="#059669">↑ 8%</text>
-              <polyline points="12,64 24,60 36,55 48,48 60,52 72,42 84,38" fill="none" stroke="#10B981" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect width="92" height="72" rx="8" fill="var(--mkt-art-surface, #FFFFFF)" stroke="var(--mkt-art-border, #E5EAF1)"/>
+              <text x="12" y="22" font-family="Inter, sans-serif" font-size="10" fill="var(--mkt-art-muted, #64748B)">Earnings</text>
+              <text x="12" y="48" font-family="Inter, sans-serif" font-size="18" font-weight="700" fill="var(--mkt-art-text, #0B1220)">₹12.4L</text>
+              <text x="64" y="48" font-family="Inter, sans-serif" font-size="10" font-weight="600" fill="var(--mkt-art-success, #059669)">↑ 8%</text>
+              <polyline points="12,64 24,60 36,55 48,48 60,52 72,42 84,38" fill="none" stroke="var(--mkt-art-success, #10B981)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
             </g>
 
             <!-- Chart card -->
             <g transform="translate(166, 232)">
-              <rect width="324" height="184" rx="8" fill="#FFFFFF" stroke="#E5EAF1"/>
-              <text x="14" y="22" font-family="Inter, sans-serif" font-size="11.5" font-weight="700" fill="#0B1220">Monthly visits</text>
-              <text x="310" y="22" text-anchor="end" font-family="Inter, sans-serif" font-size="9.5" fill="#94A3B8">Last 6 months</text>
+              <rect width="324" height="184" rx="8" fill="var(--mkt-art-surface, #FFFFFF)" stroke="var(--mkt-art-border, #E5EAF1)"/>
+              <text x="14" y="22" font-family="Inter, sans-serif" font-size="11.5" font-weight="700" fill="var(--mkt-art-text, #0B1220)">Monthly visits</text>
+              <text x="310" y="22" text-anchor="end" font-family="Inter, sans-serif" font-size="9.5" fill="var(--mkt-art-subtle, #94A3B8)">Last 6 months</text>
 
               <!-- Legend -->
               <g transform="translate(216, 16)">
-                <circle cx="0" cy="0" r="4" fill="#3B82F6"/>
-                <text x="9" y="3" font-family="Inter, sans-serif" font-size="10" fill="#64748B">Visits</text>
-                <circle cx="58" cy="0" r="4" fill="#0EA5E9"/>
-                <text x="67" y="3" font-family="Inter, sans-serif" font-size="10" fill="#64748B">Bookings</text>
+                <circle cx="0" cy="0" r="4" fill="var(--mkt-art-blue, #3B82F6)"/>
+                <text x="9" y="3" font-family="Inter, sans-serif" font-size="10" fill="var(--mkt-art-muted, #64748B)">Visits</text>
+                <circle cx="58" cy="0" r="4" fill="var(--mkt-art-sky, #0EA5E9)"/>
+                <text x="67" y="3" font-family="Inter, sans-serif" font-size="10" fill="var(--mkt-art-muted, #64748B)">Bookings</text>
               </g>
 
               <!-- Grid lines -->
-              <g stroke="#F1F5F9" stroke-width="1">
+              <g stroke="var(--mkt-art-grid, #F1F5F9)" stroke-width="1">
                 <line x1="14" y1="68" x2="310" y2="68" stroke-dasharray="2 3"/>
                 <line x1="14" y1="108" x2="310" y2="108" stroke-dasharray="2 3"/>
                 <line x1="14" y1="148" x2="310" y2="148" stroke-dasharray="2 3"/>
@@ -222,7 +222,7 @@ interface UseCase {
               </g>
 
               <!-- Bars (Bookings) -->
-              <g fill="#BAE6FD" rx="2">
+              <g fill="var(--mkt-art-sky-soft, #BAE6FD)" rx="2">
                 <rect x="38"  y="118" width="14" height="46" rx="2"/>
                 <rect x="84"  y="102" width="14" height="62" rx="2"/>
                 <rect x="130" y="110" width="14" height="54" rx="2"/>
@@ -232,26 +232,26 @@ interface UseCase {
               </g>
 
               <!-- Highlighted current bar -->
-              <rect x="268" y="58" width="14" height="106" rx="2" fill="#0EA5E9"/>
+              <rect x="268" y="58" width="14" height="106" rx="2" fill="var(--mkt-art-sky, #0EA5E9)"/>
 
               <!-- Line chart (Visits) with fill -->
               <path d="M45 130 L91 110 L137 118 L183 92 L229 76 L275 48 L275 164 L45 164 Z" fill="url(#lineFill)"/>
               <polyline points="45,130 91,110 137,118 183,92 229,76 275,48"
-                       fill="none" stroke="#3B82F6" stroke-width="2.2"
+                       fill="none" stroke="var(--mkt-art-blue, #3B82F6)" stroke-width="2.2"
                        stroke-linecap="round" stroke-linejoin="round"/>
 
               <!-- Data points -->
-              <g fill="#FFFFFF" stroke="#3B82F6" stroke-width="2">
+              <g fill="var(--mkt-art-surface, #FFFFFF)" stroke="var(--mkt-art-blue, #3B82F6)" stroke-width="2">
                 <circle cx="45"  cy="130" r="3"/>
                 <circle cx="91"  cy="110" r="3"/>
                 <circle cx="137" cy="118" r="3"/>
                 <circle cx="183" cy="92"  r="3"/>
                 <circle cx="229" cy="76"  r="3"/>
-                <circle cx="275" cy="48"  r="4" fill="#3B82F6" stroke="#FFFFFF" stroke-width="2.5"/>
+                <circle cx="275" cy="48"  r="4" fill="var(--mkt-art-blue, #3B82F6)" stroke="var(--mkt-art-surface, #FFFFFF)" stroke-width="2.5"/>
               </g>
 
               <!-- X axis labels -->
-              <g font-family="Inter, sans-serif" font-size="9" fill="#94A3B8" text-anchor="middle">
+              <g font-family="Inter, sans-serif" font-size="9" fill="var(--mkt-art-subtle, #94A3B8)" text-anchor="middle">
                 <text x="45"  y="178">May</text>
                 <text x="91"  y="178">Jun</text>
                 <text x="137" y="178">Jul</text>
@@ -264,40 +264,40 @@ interface UseCase {
 
           <!-- ===================== Floating card 1 — Notification (top right) ===================== -->
           <g filter="url(#float)">
-            <rect x="380" y="32" width="186" height="56" rx="12" fill="#FFFFFF"/>
-            <circle cx="406" cy="60" r="14" fill="#D1FAE5"/>
-            <path d="M400 60 l4 4 l8 -8" stroke="#059669" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-            <text x="430" y="56" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#0B1220">Payment received</text>
-            <text x="430" y="72" font-family="Inter, sans-serif" font-size="10" fill="#64748B">Dr. Aanya Verma · ₹1,200</text>
+            <rect x="380" y="32" width="186" height="56" rx="12" fill="var(--mkt-art-surface, #FFFFFF)"/>
+            <circle cx="406" cy="60" r="14" fill="var(--mkt-art-success-soft, #D1FAE5)"/>
+            <path d="M400 60 l4 4 l8 -8" stroke="var(--mkt-art-success, #059669)" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <text x="430" y="56" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="var(--mkt-art-text, #0B1220)">Payment received</text>
+            <text x="430" y="72" font-family="Inter, sans-serif" font-size="10" fill="var(--mkt-art-muted, #64748B)">Dr. Aanya Verma · ₹1,200</text>
           </g>
 
           <!-- ===================== Floating card 2 — Earnings w/ sparkline (right middle) ===================== -->
           <g filter="url(#float)">
-            <rect x="382" y="100" width="190" height="100" rx="14" fill="#FFFFFF"/>
-            <text x="402" y="124" font-family="Inter, sans-serif" font-size="10" fill="#64748B">Earnings this month</text>
-            <text x="402" y="154" font-family="Inter, sans-serif" font-size="22" font-weight="700" fill="#0B1220">₹12.4L</text>
+            <rect x="382" y="100" width="190" height="100" rx="14" fill="var(--mkt-art-surface, #FFFFFF)"/>
+            <text x="402" y="124" font-family="Inter, sans-serif" font-size="10" fill="var(--mkt-art-muted, #64748B)">Earnings this month</text>
+            <text x="402" y="154" font-family="Inter, sans-serif" font-size="22" font-weight="700" fill="var(--mkt-art-text, #0B1220)">₹12.4L</text>
             <g transform="translate(498, 144)">
-              <rect width="48" height="18" rx="9" fill="#D1FAE5"/>
-              <text x="24" y="13" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" font-weight="700" fill="#059669">↑ 8.2%</text>
+              <rect width="48" height="18" rx="9" fill="var(--mkt-art-success-soft, #D1FAE5)"/>
+              <text x="24" y="13" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" font-weight="700" fill="var(--mkt-art-success, #059669)">↑ 8.2%</text>
             </g>
             <!-- Sparkline area -->
             <path d="M402 188 L420 182 L438 178 L456 170 L474 168 L492 162 L510 156 L528 152 L546 144 L562 138 L562 196 L402 196 Z" fill="url(#skyFill)"/>
             <polyline points="402,188 420,182 438,178 456,170 474,168 492,162 510,156 528,152 546,144 562,138"
-                      fill="none" stroke="#0EA5E9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="562" cy="138" r="3.5" fill="#FFFFFF" stroke="#0EA5E9" stroke-width="2"/>
+                      fill="none" stroke="var(--mkt-art-sky, #0EA5E9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="562" cy="138" r="3.5" fill="var(--mkt-art-surface, #FFFFFF)" stroke="var(--mkt-art-sky, #0EA5E9)" stroke-width="2"/>
           </g>
 
           <!-- ===================== Floating card 3 — Doctor active (bottom right) ===================== -->
           <g filter="url(#float)">
-            <rect x="358" y="216" width="222" height="60" rx="12" fill="#FFFFFF"/>
+            <rect x="358" y="216" width="222" height="60" rx="12" fill="var(--mkt-art-surface, #FFFFFF)"/>
             <circle cx="385" cy="246" r="16" fill="url(#brand-soft)"/>
-            <circle cx="385" cy="241" r="5" fill="#1D4ED8"/>
-            <path d="M374 254 a11 11 0 0 1 22 0" fill="#1D4ED8"/>
-            <text x="410" y="240" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="#0B1220">Dr. Aanya Verma</text>
-            <text x="410" y="256" font-family="Inter, sans-serif" font-size="10" fill="#64748B">Cardiology · 14 yrs exp</text>
+            <circle cx="385" cy="241" r="5" fill="var(--mkt-art-blue-strong, #1D4ED8)"/>
+            <path d="M374 254 a11 11 0 0 1 22 0" fill="var(--mkt-art-blue-strong, #1D4ED8)"/>
+            <text x="410" y="240" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="var(--mkt-art-text, #0B1220)">Dr. Aanya Verma</text>
+            <text x="410" y="256" font-family="Inter, sans-serif" font-size="10" fill="var(--mkt-art-muted, #64748B)">Cardiology · 14 yrs exp</text>
             <g transform="translate(528, 234)">
-              <rect width="42" height="20" rx="10" fill="#D1FAE5"/>
-              <text x="21" y="14" text-anchor="middle" font-family="Inter, sans-serif" font-size="9.5" font-weight="700" fill="#065F46">Active</text>
+              <rect width="42" height="20" rx="10" fill="var(--mkt-art-success-soft, #D1FAE5)"/>
+              <text x="21" y="14" text-anchor="middle" font-family="Inter, sans-serif" font-size="9.5" font-weight="700" fill="var(--mkt-art-success-strong, #065F46)">Active</text>
             </g>
           </g>
         </svg>
