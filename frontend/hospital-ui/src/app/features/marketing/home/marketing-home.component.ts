@@ -14,6 +14,7 @@ interface FeatureTile {
 
 interface RoleCard {
   label: string;
+  icon: SafeHtml;
   title: string;
   copy: string;
   bullets: string[];
@@ -361,32 +362,40 @@ interface UseCase {
   </section>
 
   <!-- ============================== ROLES ============================== -->
-  <section class="mkt-section">
+  <section class="mkt-section mkt-roles" aria-labelledby="marketing-roles-title">
     <div class="mkt-container">
       <div class="mkt-band__head" style="text-align:left;">
         <span class="mkt-section__eyebrow">Built for everyone</span>
-        <h2>One login. Three experiences.</h2>
+        <h2 id="marketing-roles-title">One login. Three experiences.</h2>
         <p>Every user — admin, doctor or patient — gets a dashboard tailored to their day.</p>
       </div>
 
       <div class="mkt-role-grid">
         @for (r of roles; track r.label) {
-          <article class="mkt-role-card">
-            <div class="mkt-role-card__bar"></div>
-            <div class="mkt-role-card__label">{{ r.label }}</div>
-            <h3 class="mkt-role-card__title">{{ r.title }}</h3>
-            <p class="mkt-role-card__copy">{{ r.copy }}</p>
+          <article class="mkt-role-card" [attr.data-role]="r.label.toLowerCase()">
+            <div class="mkt-role-card__bar" aria-hidden="true"></div>
+            <div class="mkt-role-card__header">
+              <span class="mkt-role-card__icon" [innerHTML]="r.icon" aria-hidden="true"></span>
+              <div class="mkt-role-card__label">{{ r.label }}</div>
+            </div>
+            <div class="mkt-role-card__intro">
+              <h3 class="mkt-role-card__title">{{ r.title }}</h3>
+              <p class="mkt-role-card__copy">{{ r.copy }}</p>
+            </div>
 
             <ul class="mkt-role-card__list">
               @for (b of r.bullets; track b) {
-                <li>{{ b }}</li>
+                <li>
+                  <svg class="mkt-role-card__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 12 4 4 8-8"/></svg>
+                  <span>{{ b }}</span>
+                </li>
               }
             </ul>
 
             <a [routerLink]="r.label === 'Patient' ? '/register' : (r.label === 'Doctor' ? '/doctor/signup' : '/login')"
                class="mkt-role-card__cta">
               {{ r.label === 'Patient' ? 'Sign up as patient' : (r.label === 'Doctor' ? 'Apply as doctor' : 'Admin sign-in') }}
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </a>
           </article>
         }
@@ -705,6 +714,7 @@ export class MarketingHomeComponent {
   readonly roles: RoleCard[] = [
     {
       label: 'Admin',
+      icon: this.trust(`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M10 21v-5h4v5M9 8h6M12 5v6M8 13h1M15 13h1"/></svg>`),
       title: 'Full control of the hospital',
       copy: 'Manage doctors, approve signups, run payroll, view reports — all from one dashboard.',
       bullets: [
@@ -716,6 +726,7 @@ export class MarketingHomeComponent {
     },
     {
       label: 'Doctor',
+      icon: this.trust(`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v2M12 3v2M4 4v5a5 5 0 0 0 10 0V4M9 14v2a5 5 0 0 0 10 0v-2"/><circle cx="19" cy="11" r="3"/></svg>`),
       title: 'Focus on patients, not paperwork',
       copy: 'See today\'s queue, write prescriptions in seconds, track every earning.',
       bullets: [
@@ -727,6 +738,7 @@ export class MarketingHomeComponent {
     },
     {
       label: 'Patient',
+      icon: this.trust(`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/><path d="M3 12h4l2-4 4 8 2-4h6"/></svg>`),
       title: 'Your health, organised',
       copy: 'Pick your hospital, book appointments online, store reports and prescriptions forever.',
       bullets: [

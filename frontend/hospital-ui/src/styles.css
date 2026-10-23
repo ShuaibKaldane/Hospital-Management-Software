@@ -106,10 +106,9 @@
   color: var(--color-text);
 }
 
-/* Marketing cards, tiles, role cards, hero metrics — force dark surfaces. */
+/* Marketing cards, tiles, hero metrics — force dark surfaces. */
 [data-theme="dark"] .mkt-tile,
 [data-theme="dark"] .mkt-tile--feature,
-[data-theme="dark"] .mkt-role-card,
 [data-theme="dark"] .mkt-pricing-card,
 [data-theme="dark"] .mkt-cta-card,
 [data-theme="dark"] .mkt-step,
@@ -129,11 +128,7 @@
 
 /* Tile title + copy stay readable. */
 [data-theme="dark"] .mkt-tile__title,
-[data-theme="dark"] .mkt-tile__copy,
-[data-theme="dark"] .mkt-role-card__label,
-[data-theme="dark"] .mkt-role-card__title,
-[data-theme="dark"] .mkt-role-card__copy { color: var(--color-text) !important; }
-[data-theme="dark"] .mkt-role-card__list li { color: var(--color-text-muted); }
+[data-theme="dark"] .mkt-tile__copy { color: var(--color-text) !important; }
 
 [data-theme="dark"] .card,
 [data-theme="dark"] .sidebar,
@@ -164,7 +159,8 @@
 [data-theme="dark"] .mkt-nav__link,
 [data-theme="dark"] .mkt-nav__signin,
 [data-theme="dark"] .mkt-brand { color: #E2E8F0 !important; }
-[data-theme="dark"] .mkt-nav__link:hover { background: rgba(255,255,255,0.06); }
+[data-theme="dark"] .mkt-nav__link:hover,
+[data-theme="dark"] .mkt-nav__signin:hover { background: rgba(255,255,255,0.06); }
 [data-theme="dark"] .mkt-brand__plus { color: #FBBF24 !important; }
 [data-theme="dark"] .mkt-nav__link.active { background: rgba(34,211,238,0.18); color: #67E8F9; }
 
@@ -1311,45 +1307,83 @@ app-sidebar { grid-area: sidebar; }
 }
 .mkt-section--alt { background: var(--mkt-bg-soft); }
 
-/* ----------------------------- Feature tiles (light, professional) ----------------------------- */
+/* ----------------------------- Homepage feature cards ----------------------------- */
 
 .mkt-feature-grid {
+  --feature-surface: #FFFFFF;
+  --feature-border: #E2E8F0;
+  --feature-title: #0F172A;
+  --feature-copy: #526176;
+  --feature-divider: #E8EDF4;
+  --feature-shadow: 0 2px 6px -2px rgba(15, 23, 42, 0.06);
+  --feature-shadow-hover: 0 16px 32px -16px rgba(15, 23, 42, 0.18);
+
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  grid-auto-rows: minmax(220px, auto);
+  grid-auto-rows: minmax(280px, auto);
   gap: 20px;
 }
 
-.mkt-tile {
+.mkt-feature-grid .mkt-tile {
+  --tile-accent-tint: color-mix(in srgb, var(--tile-accent) 8%, var(--feature-surface));
+  --tile-ring: color-mix(in srgb, var(--tile-accent) 18%, var(--feature-surface));
+
   position: relative;
-  display: flex; flex-direction: column;
-  padding: 28px 26px;
-  background: #FFFFFF;
-  border: 1px solid #E5EAF1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 26px;
+  background: var(--feature-surface);
+  border: 1px solid var(--feature-border);
   border-radius: 16px;
-  color: var(--mkt-ink-3);
-  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
-              border-color 0.25s ease,
-              box-shadow 0.25s ease;
+  color: var(--feature-title);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   text-decoration: none;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  box-shadow: var(--feature-shadow);
   isolation: isolate;
 }
-.mkt-tile:hover {
-  transform: translateY(-6px);
-  border-color: #C7D2E0;
-  box-shadow:
-    0 24px 48px -16px rgba(15, 23, 42, 0.12),
-    0 8px 16px -8px rgba(15, 23, 42, 0.06);
+.mkt-feature-grid .mkt-tile:hover,
+.mkt-feature-grid .mkt-tile:focus-visible {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--tile-accent) 45%, var(--feature-border));
+  box-shadow: var(--feature-shadow-hover);
+}
+.mkt-feature-grid .mkt-tile:focus-visible {
+  outline: 2px solid var(--tile-accent);
+  outline-offset: 4px;
 }
 
 /* Per-tile accents — applied via tone modifier class on the card */
 .mkt-tile--blue    { --tile-accent: #1D4ED8; --tile-accent-tint: #EFF6FF; --tile-ring: rgba(29, 78, 216, 0.18); }
 .mkt-tile--indigo  { --tile-accent: #4F46E5; --tile-accent-tint: #EEF2FF; --tile-ring: rgba(79, 70, 229, 0.18); }
-.mkt-tile--sky     { --tile-accent: #0284C7; --tile-accent-tint: #F0F9FF; --tile-ring: rgba(2, 132, 199, 0.18); }
-.mkt-tile--cyan    { --tile-accent: #0891B2; --tile-accent-tint: #ECFEFF; --tile-ring: rgba(8, 145, 178, 0.18); }
+.mkt-tile--sky     { --tile-accent: #0369A1; --tile-accent-tint: #F0F9FF; --tile-ring: rgba(2, 132, 199, 0.18); }
+.mkt-tile--cyan    { --tile-accent: #0E7490; --tile-accent-tint: #ECFEFF; --tile-ring: rgba(8, 145, 178, 0.18); }
 .mkt-tile--violet  { --tile-accent: #7C3AED; --tile-accent-tint: #F5F3FF; --tile-ring: rgba(124, 58, 237, 0.18); }
 .mkt-tile--royal   { --tile-accent: #2563EB; --tile-accent-tint: #EFF6FF; --tile-ring: rgba(37, 99, 235, 0.18); }
+
+[data-theme="dark"] .mkt-feature-grid {
+  --feature-surface: #142033;
+  --feature-border: #2A3A51;
+  --feature-title: #F1F5F9;
+  --feature-copy: #AFBDD0;
+  --feature-divider: #29384D;
+  --feature-shadow: 0 4px 12px -6px rgba(0, 0, 0, 0.35);
+  --feature-shadow-hover: 0 18px 36px -18px rgba(0, 0, 0, 0.65);
+}
+[data-theme="dark"] .mkt-feature-grid .mkt-tile {
+  background: var(--feature-surface) !important;
+  border-color: var(--feature-border) !important;
+}
+[data-theme="dark"] .mkt-feature-grid .mkt-tile:hover,
+[data-theme="dark"] .mkt-feature-grid .mkt-tile:focus-visible {
+  border-color: color-mix(in srgb, var(--tile-accent) 45%, var(--feature-border)) !important;
+}
+[data-theme="dark"] .mkt-feature-grid .mkt-tile--blue   { --tile-accent: #93C5FD; }
+[data-theme="dark"] .mkt-feature-grid .mkt-tile--indigo { --tile-accent: #B4B6FF; }
+[data-theme="dark"] .mkt-feature-grid .mkt-tile--sky    { --tile-accent: #7DD3FC; }
+[data-theme="dark"] .mkt-feature-grid .mkt-tile--cyan   { --tile-accent: #67E8F9; }
+[data-theme="dark"] .mkt-feature-grid .mkt-tile--violet { --tile-accent: #C4B5FD; }
+[data-theme="dark"] .mkt-feature-grid .mkt-tile--royal  { --tile-accent: #A5B4FC; }
 
 /* Featured tile: spans 2x2, holds a visual, deeper blue gradient surface */
 .mkt-tile--feature {
@@ -1383,21 +1417,23 @@ app-sidebar { grid-area: sidebar; }
   margin-bottom: 18px;
 }
 
-.mkt-tile__icon {
-  width: 48px; height: 48px;
+.mkt-feature-grid .mkt-tile__icon {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 18px;
   border-radius: 12px;
   background: var(--tile-accent-tint, #EFF6FF);
   color: var(--tile-accent, #1D4ED8);
   display: inline-flex; align-items: center; justify-content: center;
   border: 1px solid var(--tile-ring, rgba(29, 78, 216, 0.18));
-  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
-              box-shadow 0.25s ease;
 }
-.mkt-tile:hover .mkt-tile__icon {
-  transform: scale(1.08) rotate(-3deg);
-  box-shadow: 0 8px 22px -8px var(--tile-ring, rgba(29, 78, 216, 0.45));
+.mkt-feature-grid .mkt-tile__icon svg {
+  width: 22px;
+  height: 22px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
-.mkt-tile__icon svg { width: 22px; height: 22px; }
 
 /* Featured tile's icon: white-tinted instead of accent-tinted, since the surface is dark blue */
 .mkt-tile--feature .mkt-tile__icon {
@@ -1416,40 +1452,53 @@ app-sidebar { grid-area: sidebar; }
   border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
-.mkt-tile__title {
+.mkt-feature-grid .mkt-tile__title {
   font-family: var(--font-display);
-  font-size: 1.30rem;
+  font-size: 1.2rem;
   font-weight: 600;
-  color: var(--mkt-ink);
-  margin-bottom: 10px;
+  color: var(--feature-title);
+  margin: 0 0 8px;
   letter-spacing: -0.02em;
-  line-height: 1.25;
+  line-height: 1.35;
 }
 .mkt-tile--feature .mkt-tile__title { color: #fff; font-size: 1.7rem; }
 
-.mkt-tile__copy {
-  color: var(--mkt-ink-5);
+.mkt-feature-grid .mkt-tile__copy {
+  color: var(--feature-copy);
   font-size: 0.95rem;
-  line-height: 1.6;
-  margin-bottom: 24px;
+  line-height: 1.7;
+  margin: 0 0 20px;
   flex: 1;
 }
+[data-theme="dark"] .mkt-feature-grid .mkt-tile__title { color: var(--feature-title) !important; }
+[data-theme="dark"] .mkt-feature-grid .mkt-tile__copy { color: var(--feature-copy) !important; }
 .mkt-tile--feature .mkt-tile__copy {
   color: rgba(226, 232, 240, 0.85);
   font-size: 1.02rem;
   max-width: 460px;
 }
 
-.mkt-tile__cta {
-  display: inline-flex; align-items: center; gap: 6px;
+.mkt-feature-grid .mkt-tile__cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   color: var(--tile-accent, #1D4ED8);
   font-weight: 600;
-  font-size: 0.92rem;
-  transition: gap 0.2s ease, color 0.2s ease;
-  align-self: flex-start;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  padding-top: 14px;
+  border-top: 1px solid var(--feature-divider);
   margin-top: auto;
 }
-.mkt-tile:hover .mkt-tile__cta { gap: 10px; }
+.mkt-feature-grid .mkt-tile__cta svg {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
+}
+.mkt-feature-grid .mkt-tile:hover .mkt-tile__cta svg,
+.mkt-feature-grid .mkt-tile:focus-visible .mkt-tile__cta svg { transform: translateX(3px); }
 .mkt-tile--feature .mkt-tile__cta { color: #BFDBFE; }
 
 /* Calendar visual — only inside the featured tile */
@@ -1547,8 +1596,17 @@ app-sidebar { grid-area: sidebar; }
   .mkt-tile--feature { grid-column: span 2; grid-row: auto; }
 }
 @media (max-width: 600px) {
-  .mkt-feature-grid { grid-template-columns: 1fr; }
+  .mkt-feature-grid { grid-template-columns: 1fr; gap: 16px; }
+  .mkt-feature-grid .mkt-tile { padding: 24px; }
   .mkt-tile--feature { grid-column: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mkt-feature-grid .mkt-tile,
+  .mkt-feature-grid .mkt-tile__cta svg { transition: none; }
+  .mkt-feature-grid .mkt-tile:hover,
+  .mkt-feature-grid .mkt-tile:focus-visible,
+  .mkt-feature-grid .mkt-tile:hover .mkt-tile__cta svg,
+  .mkt-feature-grid .mkt-tile:focus-visible .mkt-tile__cta svg { transform: none; }
 }
 
 /* ----------------------------- Role cards ----------------------------- */
@@ -1579,6 +1637,8 @@ app-sidebar { grid-area: sidebar; }
   transition: opacity 0.2s ease;
 }
 .mkt-role-card:hover .mkt-role-card__bar { opacity: 1; }
+
+.mkt-role-card__icon { display: none; }
 
 .mkt-role-card__label {
   font-size: 0.75rem;
@@ -1613,16 +1673,13 @@ app-sidebar { grid-area: sidebar; }
   color: var(--mkt-ink-2);
   font-size: 0.94rem;
 }
-.mkt-role-card__list li::before {
-  content: '';
+.mkt-role-card__check {
   flex-shrink: 0;
   width: 16px; height: 16px; margin-top: 3px;
   background: var(--mkt-primary-50);
+  color: #0E7490;
+  padding: 2px;
   border-radius: 50%;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230E7490' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l4 4L19 6'/%3E%3C/svg%3E");
-  background-size: 70%;
-  background-position: center;
-  background-repeat: no-repeat;
 }
 .mkt-role-card__cta {
   display: inline-flex; align-items: center; gap: 6px;
@@ -1633,7 +1690,148 @@ app-sidebar { grid-area: sidebar; }
 }
 .mkt-role-card__cta:hover { gap: 10px; color: var(--mkt-primary-700); }
 
+/* Role cards use their own palette so light marketing tokens cannot leak into dark mode. */
+[data-theme="dark"] .mkt-role-card {
+  --role-accent: #7DD3FC;
+  --role-accent-rgb: 125, 211, 252;
+
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 28px;
+  border-radius: 18px;
+  border-color: #2B3B52;
+  background:
+    radial-gradient(ellipse at top left, rgba(var(--role-accent-rgb), 0.08), transparent 65%),
+    linear-gradient(160deg, #152238, #111B2C 70%);
+  color: #F1F5F9;
+  box-shadow: 0 8px 24px -16px rgba(0, 0, 0, 0.6);
+}
+[data-theme="dark"] .mkt-role-card[data-role="doctor"] {
+  --role-accent: #C4B5FD;
+  --role-accent-rgb: 196, 181, 253;
+}
+[data-theme="dark"] .mkt-role-card[data-role="patient"] {
+  --role-accent: #5EEAD4;
+  --role-accent-rgb: 94, 234, 212;
+}
+[data-theme="dark"] .mkt-role-card:hover,
+[data-theme="dark"] .mkt-role-card:focus-within {
+  border-color: rgba(var(--role-accent-rgb), 0.5);
+  box-shadow: 0 16px 32px -20px rgba(0, 0, 0, 0.7);
+}
+[data-theme="dark"] .mkt-role-card__bar {
+  height: 3px;
+  background: linear-gradient(90deg, var(--role-accent), rgba(var(--role-accent-rgb), 0.15));
+  opacity: 0.8;
+}
+[data-theme="dark"] .mkt-role-card__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+[data-theme="dark"] .mkt-role-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(var(--role-accent-rgb), 0.1);
+  border: 1px solid rgba(var(--role-accent-rgb), 0.2);
+  color: var(--role-accent);
+}
+[data-theme="dark"] .mkt-role-card__icon svg { width: 24px; height: 24px; }
+[data-theme="dark"] .mkt-role-card__label {
+  margin-bottom: 0;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(var(--role-accent-rgb), 0.08);
+  color: var(--role-accent);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+}
+[data-theme="dark"] .mkt-role-card__intro { margin-bottom: 24px; }
+[data-theme="dark"] .mkt-role-card__title {
+  margin: 0 0 12px;
+  color: #F1F5F9;
+  font-size: 1.45rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-wrap: balance;
+}
+[data-theme="dark"] .mkt-role-card .mkt-role-card__copy {
+  color: #AABBD0 !important;
+  font-size: 0.97rem;
+  line-height: 1.7;
+}
+[data-theme="dark"] .mkt-role-card__list {
+  flex: 1;
+  margin: 0 0 26px;
+  padding-top: 20px;
+  border-color: rgba(var(--role-accent-rgb), 0.14);
+}
+[data-theme="dark"] .mkt-role-card__list li {
+  gap: 12px;
+  padding: 8px 0;
+  color: #C5D2E3;
+  line-height: 1.6;
+}
+[data-theme="dark"] .mkt-role-card__list li span { min-width: 0; }
+[data-theme="dark"] .mkt-role-card__check {
+  width: 19px;
+  height: 19px;
+  margin-top: 2px;
+  padding: 3px;
+  background: rgba(var(--role-accent-rgb), 0.12);
+  color: var(--role-accent);
+}
+[data-theme="dark"] .mkt-role-card__cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 46px;
+  margin-top: auto;
+  padding: 11px 16px;
+  border: 1px solid rgba(var(--role-accent-rgb), 0.25);
+  border-radius: 10px;
+  background: rgba(var(--role-accent-rgb), 0.08);
+  color: var(--role-accent);
+  font-size: 0.93rem;
+  line-height: 1.4;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+[data-theme="dark"] .mkt-role-card__cta svg {
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+[data-theme="dark"] .mkt-role-card__cta:hover {
+  background: rgba(var(--role-accent-rgb), 0.16);
+  border-color: rgba(var(--role-accent-rgb), 0.5);
+  color: var(--role-accent);
+  text-decoration: none;
+}
+[data-theme="dark"] .mkt-role-card__cta:hover svg { transform: translateX(3px); }
+.mkt-role-card__cta:focus-visible {
+  outline: 2px solid var(--role-accent, var(--mkt-primary));
+  outline-offset: 4px;
+}
+@supports (grid-template-rows: subgrid) {
+  [data-theme="dark"] .mkt-role-card {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 4;
+    row-gap: 0;
+  }
+}
+
 @media (max-width: 900px) { .mkt-role-grid { grid-template-columns: 1fr; } }
+@media (max-width: 480px) {
+  [data-theme="dark"] .mkt-role-card { padding: 24px; }
+}
 
 /* ----------------------------- Use cases ----------------------------- */
 
